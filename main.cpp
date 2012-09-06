@@ -17,21 +17,45 @@ int main(int argc, char* argv[])
 void loop()
 {
     bool running = true;
+    float x = 0;
+    float y = 0;
+    float z = 0;
+    float t = 0;
 
     while (running) {
+        glClear(GL_COLOR_BUFFER_BIT);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glTranslated(x,y,z);
+        glRotated(t,0,1,0);
+
         draw();
         glfwSwapBuffers();
 
         if (glfwGetKey(GLFW_KEY_ESC)) {
             running = false;
+        } else if (glfwGetKey('W')) {
+            y += .0001;
+        } else if (glfwGetKey('S')) {
+            y -= .0001;
+        } else if (glfwGetKey('D')) {
+            x += .0001;
+        } else if (glfwGetKey('A')) {
+            x -= .0001;
+        } else if (glfwGetKey('Q')) {
+            t += .01;
+        } else if (glfwGetKey('E')) {
+            t -= .01;
+        } else if (glfwGetKey('R')) {
+            z -= .0001;
+        } else if (glfwGetKey('F')) {
+            z += .0001;
         }
     }
 }
 
 void draw()
 {
-    glClear(GL_COLOR_BUFFER_BIT);
-
     float triangle1[] = {0.0, 0.0,   0.5, 0.0,   0.0, 0.5};
     float triangle2[] = {-0.8, -0.8,   -0.3, -0.8,   -0.8, -0.3};
 
