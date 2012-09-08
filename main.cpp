@@ -1,15 +1,56 @@
+#include <GL/glew.h>
 #include <GL/glfw.h>
+#include <cmath>
+#include "shader/load.h"
+#include "texture/load.h"
+#include "object/load.h"
 #include <iostream>
 
 void loop();
-void draw();
+void render();
+int make_resources();
+void  update_fade_factor();
+
+struct Resources
+{
+    GLuint vertex_buffer, element_buffer;
+    GLuint textures[2];
+
+    GLuint vertex_shader, fragment_shader, program;
+    
+    struct {
+        GLint fade_factor;
+        GLint textures[2];
+    } uniforms;
+
+    struct {
+        GLint position;
+    } attributes;
+
+    GLfloat fade_factor;
+} resources;
+
+static const GLfloat vertex_buffer_data[] = { 
+    -1.0f, -1.0f,
+     1.0f, -1.0f,
+    -1.0f,  1.0f,
+     1.0f,  1.0f
+};
+static const GLushort element_buffer_data[] = { 0, 1, 2, 3 };
 
 int main(int argc, char* argv[])
 {
     glfwInit();
-    glfwOpenWindow(640, 480, 0,0,0, 0,0,0, GLFW_WINDOW);
+    glfwOpenWindow(400, 300, 0,0,0, 0,0,0, GLFW_WINDOW);
     glfwDisable(GLFW_MOUSE_CURSOR);
+    glfwSetTime(0);
+    glewInit();
 
+    int resources_ok = make_resources();
+    if (!resources_ok) {
+        std::cerr << "Resources not correctly loaded" << std::endl;
+        return 1;
+    }
     loop();
 
     glfwCloseWindow();
@@ -30,8 +71,6 @@ void loop()
 
     while (running) {
         glClear(GL_COLOR_BUFFER_BIT);
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
 
         if (glfwGetKey(GLFW_KEY_ESC)) {
             running = false;
@@ -71,24 +110,108 @@ void loop()
         glRotated(t_x, 0,1,0);
         glRotated(t_y, 1,0,0);
 
-        draw();
+        update_fade_factor();
+
+        render();
         glfwSwapBuffers();
     }
 }
 
-void draw()
+void render()
 {
-    float triangle1[] = {0.0, 0.0,   0.5, 0.0,   0.0, 0.5};
-    float triangle2[] = {-0.8, -0.8,   -0.3, -0.8,   -0.8, -0.3};
+    glUseProgram(resources.program);
 
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, triangle1);
-    glEnableVertexAttribArray(0);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glUniform1f(resources.uniforms.fade_factor, resources.fade_factor);
 
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, triangle2);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, resources.textures[0]);
+    glUniform1i(resources.uniforms.textures[0], 0);
 
-    glDisableVertexAttribArray(0);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, resources.textures[1]);
+    glUniform1i(resources.uniforms.textures[1], 1);
 
-    glFlush();
+    glBindBuffer(GL_ARRAY_BUFFER, resources.vertex_buffer);
+    glVertexAttribPointer(
+        resources.attributes.position,    /* attribute */
+        2,                                /* size */
+        GL_FLOAT,                         /* type */
+        GL_FALSE,                         /* normalized? */
+        sizeof(GLfloat)*2,                /* stride */
+        (void*)0                          /* array buffer offset */
+    );
+    glEnableVertexAttribArray(resources.attributes.position);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resources.element_buffer);
+    glDrawElements(
+        GL_TRIANGLE_STRIP,  /* mode */
+        4,                  /* count */
+        GL_UNSIGNED_SHORT,  /* type */
+        (void*)0            /* element array buffer offset */
+    );
+
+    glDisableVertexAttribArray(resources.attributes.position);
+}
+
+int make_resources()
+{
+    resources.vertex_buffer = make_buffer(
+        GL_ARRAY_BUFFER,
+        vertex_buffer_data,
+        sizeof(vertex_buffer_data)
+    );
+    resources.element_buffer = make_buffer(
+        GL_ELEMENT_ARRAY_BUFFER,
+        element_buffer_data,
+        sizeof(element_buffer_data)
+    );
+
+    resources.textures[0] = make_texture("texture/hello1.tga");
+    resources.textures[1] = make_texture("texture/hello2.tga");
+    if (resources.textures[0] == 0 || resources.textures[1] == 0) {
+        return 0;
+    }
+
+    resources.vertex_shader = make_shader(
+        GL_VERTEX_SHADER,
+        "shader/hello.vert"
+    );
+    if (resources.vertex_shader == 0) {
+        return 0;
+    }
+
+    resources.fragment_shader = make_shader(
+        GL_FRAGMENT_SHADER,
+        "shader/hello.frag"
+    );
+    if (resources.fragment_shader == 0) {
+        return 0;
+    }
+
+    resources.program = make_program(
+        resources.vertex_shader,
+        resources.fragment_shader
+    );
+    if (resources.program == 0) {
+        return 0;
+    }
+
+    resources.uniforms.fade_factor
+        = glGetUniformLocation(resources.program, "fade_factor");
+    resources.uniforms.textures[0]
+        = glGetUniformLocation(resources.program, "textures[0]");
+    resources.uniforms.textures[1]
+        = glGetUniformLocation(resources.program, "textures[1]");
+
+    resources.attributes.position
+        = glGetAttribLocation(resources.program, "position");
+
+    return 1;
+}
+
+void update_fade_factor()
+{
+    static float old_time = 0;
+    float time = (float)glfwGetTime();
+    resources.fade_factor = sin(time) * 0.5f + 0.5f;
 }
