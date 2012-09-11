@@ -85,11 +85,22 @@ endif
 
 .PHONY: release debug clean
 
+# COMPILATION RULES
 compile: $(OBJECTS)
 	$(CXX) -o $(BUILD_DIR)$(EXECUTABLE) $(LDFLAGS) $(OBJECTS)
 
 $(OBJECTS_DIR)%.o: %.cpp
 	$(CXX) -c $< -o $@ $(INCPATH) $(CXXFLAGS)
+
+# DEPENDECIES CHECK
+ifneq ($(has_build_dir),)
+    include $(BUILD_DIR)make.depend
+endif
+
+$(BUILD_DIR)make.depend: $(SOURCES)
+	for d in $(SOURCES); do \
+	    $(CXX) -MM $$d -MT $(OBJECTS_DIR)$${d/.cpp/.o} $(INCPATH) >> $@; \
+	done
 
 clean:
 	rm -rf $(BUILD_DIR)
