@@ -8,8 +8,8 @@
 
 void loop();
 void render();
-int make_resources();
-void  update_fade_factor();
+int make_resources(const char *vertex_shader_file);
+void  update_timer();
 
 struct Resources
 {
@@ -19,7 +19,7 @@ struct Resources
     GLuint vertex_shader, fragment_shader, program;
     
     struct {
-        GLint fade_factor;
+        GLint timer;
         GLint textures[2];
     } uniforms;
 
@@ -27,14 +27,14 @@ struct Resources
         GLint position;
     } attributes;
 
-    GLfloat fade_factor;
+    GLfloat timer;
 } resources;
 
 static const GLfloat vertex_buffer_data[] = { 
-    -1.0f, -1.0f,
-     1.0f, -1.0f,
-    -1.0f,  1.0f,
-     1.0f,  1.0f
+    -1.0f, -1.0f, 0.0f, 1.0f,
+	 1.0f, -1.0f, 0.0f, 1.0f,
+	-1.0f,  1.0f, 0.0f, 1.0f,
+	 1.0f,  1.0f, 0.0f, 1.0f
 };
 static const GLushort element_buffer_data[] = { 0, 1, 2, 3 };
 
@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
     glfwSetTime(0);
     glewInit();
 
-    int resources_ok = make_resources();
+    int resources_ok = make_resources(argc >= 2 ? argv[1] : "shader/hello.vert");
     if (!resources_ok) {
         std::cerr << "Resources not correctly loaded" << std::endl;
         return 1;
@@ -112,7 +112,7 @@ void loop()
         glRotated(t_x, 0,1,0);
         glRotated(t_y, 1,0,0);
 
-        update_fade_factor();
+        update_timer();
 
         render();
         glfwSwapBuffers();
@@ -121,9 +121,12 @@ void loop()
 
 void render()
 {
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+	
     glUseProgram(resources.program);
 
-    glUniform1f(resources.uniforms.fade_factor, resources.fade_factor);
+    glUniform1f(resources.uniforms.timer, resources.timer);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, resources.textures[0]);
@@ -136,10 +139,10 @@ void render()
     glBindBuffer(GL_ARRAY_BUFFER, resources.vertex_buffer);
     glVertexAttribPointer(
         resources.attributes.position,    /* attribute */
-        2,                                /* size */
+        4,                                /* size */
         GL_FLOAT,                         /* type */
         GL_FALSE,                         /* normalized? */
-        sizeof(GLfloat)*2,                /* stride */
+        sizeof(GLfloat)*4,                /* stride */
         (void*)0                          /* array buffer offset */
     );
     glEnableVertexAttribArray(resources.attributes.position);
@@ -155,7 +158,7 @@ void render()
     glDisableVertexAttribArray(resources.attributes.position);
 }
 
-int make_resources()
+int make_resources(const char *vertex_shader_file)
 {
     resources.vertex_buffer = make_buffer(
         GL_ARRAY_BUFFER,
@@ -173,10 +176,9 @@ int make_resources()
     if (resources.textures[0] == 0 || resources.textures[1] == 0) {
         return 0;
     }
-
     resources.vertex_shader = make_shader(
         GL_VERTEX_SHADER,
-        "shader/hello.vert"
+        vertex_shader_file
     );
     if (resources.vertex_shader == 0) {
         return 0;
@@ -198,8 +200,8 @@ int make_resources()
         return 0;
     }
 
-    resources.uniforms.fade_factor
-        = glGetUniformLocation(resources.program, "fade_factor");
+    resources.uniforms.timer
+        = glGetUniformLocation(resources.program, "timer");
     resources.uniforms.textures[0]
         = glGetUniformLocation(resources.program, "textures[0]");
     resources.uniforms.textures[1]
@@ -211,8 +213,8 @@ int make_resources()
     return 1;
 }
 
-void update_fade_factor()
+void update_timer()
 {
     float time = (float)glfwGetTime();
-    resources.fade_factor = sin(time) * 0.5f + 0.5f;
+    resources.timer = time;
 }
