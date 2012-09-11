@@ -4,15 +4,6 @@
 #include <sstream>
 #include <vector>
 
-static int max(int a, int b)
-{
-    if (a >= b) {
-        return a;
-    } else  {
-        return b;
-    }
-}
-
 GLuint make_shader(GLenum type, const char* file_path)
 {
     std::ifstream in(file_path);

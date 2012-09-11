@@ -40,6 +40,8 @@ static const GLushort element_buffer_data[] = { 0, 1, 2, 3 };
 
 int main(int argc, char* argv[])
 {
+    (void) argc;
+    (void) argv;
     glfwInit();
     glfwOpenWindow(400, 300, 0,0,0, 0,0,0, GLFW_WINDOW);
     glfwDisable(GLFW_MOUSE_CURSOR);
@@ -211,7 +213,6 @@ int make_resources()
 
 void update_fade_factor()
 {
-    static float old_time = 0;
     float time = (float)glfwGetTime();
     resources.fade_factor = sin(time) * 0.5f + 0.5f;
 }
