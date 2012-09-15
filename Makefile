@@ -19,7 +19,7 @@ CXXFLAGS=-Wall\
 	 -Wcast-align
 CXXFLAGS_R=-O2 -s
 CXXFLAGS_D=-O0 -g
-LIBS=osg osgDB osgViewer OpenThreads
+LIBS=osg osgDB osgViewer osgGA OpenThreads
 DEFINE_D=DEBUG
 INCPATH=.
 

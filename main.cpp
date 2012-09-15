@@ -3,6 +3,7 @@
 #include <osg/Geode>
 #include <osg/PolygonMode>
 #include <osgViewer/Viewer>
+#include <osgGA/TrackballManipulator>
 #include "object/ShadedSquare.h"
 
 int main(int argc, char* argv[])
@@ -27,10 +28,18 @@ int main(int argc, char* argv[])
     fog->setEnd(100);
     ss->setAttributeAndModes(fog);
 
-    osgViewer::Viewer viewer;
-    viewer.setSceneData(root);
-    viewer.getCamera()->setClearColor(fogColor);
 
-    viewer.run();
+    osg::ref_ptr<osgViewer::Viewer> viewer(new osgViewer::Viewer());
+    viewer->setCameraManipulator(new osgGA::TrackballManipulator());
+    viewer->getCameraManipulator()->setHomePosition(
+            osg::Vec3d(0.0, 0.0, 10.0),
+            osg::Vec3d(0.0, 0.0, 0.0),
+            osg::Vec3d(0.0, 1.0, 0.0)
+        );
+    viewer->getCamera()->setClearColor(fogColor);
+    viewer->setSceneData(root);
+    viewer->home();
+
+    viewer->run();
 }
 
