@@ -19,6 +19,6 @@ void main()
         vec3(        0.0,         0.0,  1.0)
     );
     gl_Position = gl_ModelViewProjectionMatrix * vec4(window_scale * rotation * position.xyz, 1.0);
-    texcoord = position.xz;
+    texcoord = position.xy;
     fade_factor = sin(timer) * 0.5 + 0.5;
 }

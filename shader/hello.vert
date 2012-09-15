@@ -9,6 +9,6 @@ varying float fade_factor;
 void main()
 {
     gl_Position = gl_ModelViewProjectionMatrix * position;
-    texcoord = position.xz;
+    texcoord = position.xy;
     fade_factor = sin(timer-1.57) * 0.5 + 0.5;
 }

@@ -1,6 +1,8 @@
 EXECUTABLE=bogey
 
 SOURCES=main.cpp\
+	object/ShadedSquare.cpp\
+	lib/UpdateTimerCallback.cpp\
 
 CXX=g++
 CXXFLAGS=-Wall\
