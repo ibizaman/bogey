@@ -1,10 +1,6 @@
 EXECUTABLE=bogey
 
 SOURCES=main.cpp\
-	shader/load.cpp\
-	texture/load.cpp\
-	object/load.cpp\
-	lib/file.cpp\
 
 CXX=g++
 CXXFLAGS=-Wall\
@@ -21,8 +17,7 @@ CXXFLAGS=-Wall\
 	 -Wcast-align
 CXXFLAGS_R=-O2 -s
 CXXFLAGS_D=-O0 -g
-LIBS=glfw glew
-FRAMEWORKS=OpenGL
+LIBS=osg osgDB osgViewer OpenThreads
 DEFINE_D=DEBUG
 INCPATH=.
 

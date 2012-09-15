@@ -1,220 +1,124 @@
-#include <GL/glew.h>
-#include <GL/glfw.h>
-#include <cmath>
-#include "shader/load.h"
-#include "texture/load.h"
-#include "object/load.h"
+#include <osg/Fog>
+#include <osg/Group>
+#include <osg/Geode>
+#include <osg/Geometry>
+#include <osg/Node>
+#include <osg/PolygonMode>
+#include <osg/Texture2D>
+#include <osgDB/ReadFile>
+#include <osgViewer/Viewer>
+#include <string>
 #include <iostream>
 
-void loop();
-void render();
-int make_resources(const char *vertex_shader_file);
-void  update_timer();
+osg::ref_ptr<osg::Geode> getShadedSquareNode(const std::string&);
 
-struct Resources
+class UpdateTimer : public osg::Uniform::Callback
 {
-    GLuint vertex_buffer, element_buffer;
-    GLuint textures[2];
-
-    GLuint vertex_shader, fragment_shader, program;
-    
-    struct {
-        GLint timer;
-        GLint textures[2];
-    } uniforms;
-
-    struct {
-        GLint position;
-    } attributes;
-
-    GLfloat timer;
-} resources;
-
-static const GLfloat vertex_buffer_data[] = { 
-    -1.0f, -1.0f, 0.0f, 1.0f,
-	 1.0f, -1.0f, 0.0f, 1.0f,
-	-1.0f,  1.0f, 0.0f, 1.0f,
-	 1.0f,  1.0f, 0.0f, 1.0f
+public:
+    virtual void operator()(osg::Uniform* uniform, osg::NodeVisitor* nv)
+    {
+        uniform->set((float)nv->getFrameStamp()->getSimulationTime());
+    }
 };
-static const GLushort element_buffer_data[] = { 0, 1, 2, 3 };
 
 int main(int argc, char* argv[])
 {
-    (void) argc;
-    (void) argv;
-    glfwInit();
-    glfwOpenWindow(400, 300, 0,0,0, 0,0,0, GLFW_WINDOW);
-    glfwDisable(GLFW_MOUSE_CURSOR);
-    glfwSetTime(0);
-    glewInit();
+    const osg::Vec4 fogColor(0.5, 0.5, 1, 1.0);
 
-    int resources_ok = make_resources(argc >= 2 ? argv[1] : "shader/hello.vert");
-    if (!resources_ok) {
-        std::cerr << "Resources not correctly loaded" << std::endl;
-        return 1;
-    }
-    loop();
+    osg::ref_ptr<osg::Group> root(new osg::Group());
+    root->addChild(getShadedSquareNode(argc >= 2 ? argv[1] : "shader/hello.vert"));
 
-    glfwCloseWindow();
-    glfwTerminate();
+    osg::ref_ptr<osg::StateSet> ss = root->getOrCreateStateSet();
+
+    ss->setMode(GL_LIGHTING, osg::StateAttribute::OFF);
+
+    osg::ref_ptr<osg::Fog> fog(new osg::Fog());
+    fog->setMode(osg::Fog::LINEAR);
+    fog->setColor(fogColor);
+    fog->setStart(15);
+    fog->setEnd(100);
+    ss->setAttributeAndModes(fog);
+
+    osgViewer::Viewer viewer;
+    viewer.setSceneData(root);
+    viewer.getCamera()->setClearColor(fogColor);
+
+    viewer.run();
 }
 
-void loop()
+osg::ref_ptr<osg::Geode> getShadedSquareNode(const std::string& vertex_shader_file)
 {
-    bool running = true;
-    float x = 0;
-    float y = 0;
-    float z = 0;
+    osg::ref_ptr<osg::Geometry> geometry(new osg::Geometry());
+    osg::ref_ptr<osg::StateSet> state(geometry->getOrCreateStateSet());
 
-    int m_x = 0;
-    int m_y = 0;
-    float t_x = 0;
-    float t_y = 0;
+    // add vertices
+    osg::ref_ptr<osg::VertexBufferObject> vbo(geometry->getOrCreateVertexBufferObject());
+    vbo->setUsage(GL_STATIC_DRAW);
 
-    while (running) {
-        glClear(GL_COLOR_BUFFER_BIT);
+    geometry->setUseDisplayList(false);
+    geometry->setUseVertexBufferObjects(true);
 
-        if (glfwGetKey(GLFW_KEY_ESC)) {
-            running = false;
-        } else if (glfwGetKey('W')) {
-            z += .0001;
-        } else if (glfwGetKey('S')) {
-            z -= .0001;
-        } else if (glfwGetKey('D')) {
-            x += .0001;
-        } else if (glfwGetKey('A')) {
-            x -= .0001;
-        }
+    osg::ref_ptr<osg::Vec4Array> vertices(new osg::Vec4Array());
+    vertices->push_back(osg::Vec4(0, 0, 0, 1));
+    vertices->push_back(osg::Vec4(0, 0, 1, 1));
+    vertices->push_back(osg::Vec4(1, 0, 0, 1));
+    vertices->push_back(osg::Vec4(1, 0, 1, 1));
 
-        glTranslated(x,y,z);
+    // add elements
+    osg::ref_ptr<osg::DrawElementsUInt> surface(new osg::DrawElementsUInt(osg::PrimitiveSet::TRIANGLE_STRIP, 0));
+    surface->push_back(0);
+    surface->push_back(1);
+    surface->push_back(2);
+    surface->push_back(3);
+    geometry->addPrimitiveSet(surface);
 
-        int old_m_x = m_x;
-        int old_m_y = m_y;
-        glfwGetMousePos(&m_x, &m_y);
+    // create shader
+    osg::ref_ptr<osg::Shader> vertex_shader(new osg::Shader(osg::Shader::VERTEX));
+    vertex_shader->loadShaderSourceFromFile(vertex_shader_file);
 
-        float speed = 2.5;
-        if (m_x - old_m_x > 0) {
-            t_x += speed;
-        } else if (m_x - old_m_x < 0) {
-            t_x -= speed;
-        }
+    osg::ref_ptr<osg::Shader> fragment_shader(new osg::Shader(osg::Shader::FRAGMENT));
+    fragment_shader->loadShaderSourceFromFile("shader/hello.frag");
 
-        if (m_y - old_m_y > 0) {
-            t_y += speed;
-        } else if (m_y - old_m_y < 0) {
-            t_y -= speed;
-        }
-        if (t_y > 89) {
-            t_y = 89;
-        } else if (t_y < -89) {
-            t_y = -89;
-        }
-        glRotated(t_x, 0,1,0);
-        glRotated(t_y, 1,0,0);
+    osg::ref_ptr<osg::Program> program(new osg::Program);
+    program->setName(vertex_shader_file);
+    program->addShader(vertex_shader);
+    program->addShader(fragment_shader);
 
-        update_timer();
+    int attrib_loc = 0;
+    program->addBindAttribLocation("position", attrib_loc);
 
-        render();
-        glfwSwapBuffers();
-    }
+    geometry->setVertexAttribArray(attrib_loc, vertices);
+    geometry->setVertexAttribBinding(attrib_loc, osg::Geometry::BIND_PER_VERTEX);
+
+    state->setAttributeAndModes(program);
+
+    // create timer uniform
+    osg::ref_ptr<osg::Uniform> timer(new osg::Uniform("timer", 0.0f));
+    timer->setUpdateCallback(new UpdateTimer());
+    state->addUniform(timer);
+
+    // create texture and uniform related to hello1.tga
+    osg::ref_ptr<osg::Texture2D> hello1_texture(new osg::Texture2D());
+    hello1_texture->setDataVariance(osg::Object::DYNAMIC);
+    hello1_texture->setImage(osgDB::readImageFile("texture/hello1.tga"));
+    state->setTextureAttributeAndModes(0, hello1_texture);
+
+    osg::ref_ptr<osg::Uniform> hello1_uniform(new osg::Uniform("texture0", 0));
+    state->addUniform(hello1_uniform);
+
+    // create texture and uniform related to hello2.tga
+    osg::ref_ptr<osg::Texture2D> hello2_texture(new osg::Texture2D());
+    hello2_texture->setDataVariance(osg::Object::DYNAMIC);
+    hello2_texture->setImage(osgDB::readImageFile("texture/hello2.tga"));
+    state->setTextureAttributeAndModes(1, hello2_texture);
+
+    osg::ref_ptr<osg::Uniform> hello2_uniform(new osg::Uniform("texture1", 1));
+    state->addUniform(hello2_uniform);
+
+    // create geode container
+    osg::ref_ptr<osg::Geode> geode(new osg::Geode());
+    geode->addDrawable(geometry);
+
+    return geode;
 }
 
-void render()
-{
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
-	
-    glUseProgram(resources.program);
-
-    glUniform1f(resources.uniforms.timer, resources.timer);
-
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, resources.textures[0]);
-    glUniform1i(resources.uniforms.textures[0], 0);
-
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, resources.textures[1]);
-    glUniform1i(resources.uniforms.textures[1], 1);
-
-    glBindBuffer(GL_ARRAY_BUFFER, resources.vertex_buffer);
-    glVertexAttribPointer(
-        resources.attributes.position,    /* attribute */
-        4,                                /* size */
-        GL_FLOAT,                         /* type */
-        GL_FALSE,                         /* normalized? */
-        sizeof(GLfloat)*4,                /* stride */
-        (void*)0                          /* array buffer offset */
-    );
-    glEnableVertexAttribArray(resources.attributes.position);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resources.element_buffer);
-    glDrawElements(
-        GL_TRIANGLE_STRIP,  /* mode */
-        4,                  /* count */
-        GL_UNSIGNED_SHORT,  /* type */
-        (void*)0            /* element array buffer offset */
-    );
-
-    glDisableVertexAttribArray(resources.attributes.position);
-}
-
-int make_resources(const char *vertex_shader_file)
-{
-    resources.vertex_buffer = make_buffer(
-        GL_ARRAY_BUFFER,
-        vertex_buffer_data,
-        sizeof(vertex_buffer_data)
-    );
-    resources.element_buffer = make_buffer(
-        GL_ELEMENT_ARRAY_BUFFER,
-        element_buffer_data,
-        sizeof(element_buffer_data)
-    );
-
-    resources.textures[0] = make_texture("texture/hello1.tga");
-    resources.textures[1] = make_texture("texture/hello2.tga");
-    if (resources.textures[0] == 0 || resources.textures[1] == 0) {
-        return 0;
-    }
-    resources.vertex_shader = make_shader(
-        GL_VERTEX_SHADER,
-        vertex_shader_file
-    );
-    if (resources.vertex_shader == 0) {
-        return 0;
-    }
-
-    resources.fragment_shader = make_shader(
-        GL_FRAGMENT_SHADER,
-        "shader/hello.frag"
-    );
-    if (resources.fragment_shader == 0) {
-        return 0;
-    }
-
-    resources.program = make_program(
-        resources.vertex_shader,
-        resources.fragment_shader
-    );
-    if (resources.program == 0) {
-        return 0;
-    }
-
-    resources.uniforms.timer
-        = glGetUniformLocation(resources.program, "timer");
-    resources.uniforms.textures[0]
-        = glGetUniformLocation(resources.program, "textures[0]");
-    resources.uniforms.textures[1]
-        = glGetUniformLocation(resources.program, "textures[1]");
-
-    resources.attributes.position
-        = glGetAttribLocation(resources.program, "position");
-
-    return 1;
-}
-
-void update_timer()
-{
-    float time = (float)glfwGetTime();
-    resources.timer = time;
-}
