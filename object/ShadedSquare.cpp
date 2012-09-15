@@ -40,10 +40,10 @@ void ShadedSquare::createVertices(osg::ref_ptr<osg::Geometry> geometry)
 {
     // add vertices
     osg::ref_ptr<osg::Vec4Array> vertices(new osg::Vec4Array());
-    vertices->push_back(osg::Vec4(0, 0, 0, 1));
-    vertices->push_back(osg::Vec4(0, 1, 0, 1));
-    vertices->push_back(osg::Vec4(1, 0, 0, 1));
-    vertices->push_back(osg::Vec4(1, 1, 0, 1));
+    vertices->push_back(osg::Vec4(-2,-1.5, 0, 1));
+    vertices->push_back(osg::Vec4(-2, 1.5, 0, 1));
+    vertices->push_back(osg::Vec4( 2,-1.5, 0, 1));
+    vertices->push_back(osg::Vec4( 2, 1.5, 0, 1));
 
     // add elements
     osg::ref_ptr<osg::DrawElementsUInt> surface(new osg::DrawElementsUInt(osg::PrimitiveSet::TRIANGLE_STRIP, 0));
