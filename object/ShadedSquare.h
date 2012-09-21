@@ -1,28 +1,26 @@
 #ifndef SHADEDSQUARE_H
 #define SHADEDSQUARE_H
 
-#include <osg/Geometry>
-#include <osg/Geode>
 #include <string>
+#include <osg/ref_ptr>
+#include <osg/StateSet>
+#include "lib/BaseDrawableGeode.h"
 
-class ShadedSquare : public osg::Geode
+class ShadedSquare : public BaseDrawableGeode
 {
 public:
     ShadedSquare(const std::string&, const std::string&);
-
-    void setVertexShader(const std::string&);
-    void setFragmentShader(const std::string&);
+    virtual void init();
 
 protected:
     virtual ~ShadedSquare();
 
-    void init();
-    void createVertices(osg::ref_ptr<osg::Geometry>);
-    void createShader(osg::ref_ptr<osg::StateSet>);
+    virtual void createVertices(Vertices&);
+    virtual void createElements(ElementsList&);
+    virtual void createShader(Program&);
+    virtual void createTextures(TexturesList&);
     void createTimer(osg::ref_ptr<osg::StateSet>);
-    void createTextures(osg::ref_ptr<osg::StateSet>);
 
-    int _attribLocation;
     std::string _vertexShader;
     std::string _fragmentShader;
 };

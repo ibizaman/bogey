@@ -3,6 +3,7 @@ EXECUTABLE=bogey
 SOURCES=main.cpp\
 	object/ShadedSquare.cpp\
 	lib/UpdateTimerCallback.cpp\
+	lib/BaseDrawableGeode.cpp\
 
 CXX=g++
 CXXFLAGS=-Wall\

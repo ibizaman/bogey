@@ -12,7 +12,8 @@ int main(int argc, char* argv[])
 
     std::string vertexShader = argc >= 2 ? argv[1] : "shader/hello.vert";
     std::string fragmentShader = "shader/hello.frag";
-    osg::ref_ptr<osg::Geode> hello(new ShadedSquare(vertexShader, fragmentShader));
+    osg::ref_ptr<ShadedSquare> hello(new ShadedSquare(vertexShader, fragmentShader));
+    hello->init();
 
     osg::ref_ptr<osg::Group> root(new osg::Group());
     root->addChild(hello);
