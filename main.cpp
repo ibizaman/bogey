@@ -6,6 +6,10 @@
 #include <osgGA/TrackballManipulator>
 #include "object/ShadedSquare.h"
 
+#ifdef DEBUG
+#include <osgViewer/ViewerEventHandlers>
+#endif
+
 int main(int argc, char* argv[])
 {
     const osg::Vec4 fogColor(0.5, 0.5, 1, 1.0);
@@ -40,6 +44,9 @@ int main(int argc, char* argv[])
     viewer->getCamera()->setClearColor(fogColor);
     viewer->setSceneData(root);
     viewer->home();
+#ifdef DEBUG
+    viewer->addEventHandler(new osgViewer::StatsHandler);
+#endif
 
     viewer->run();
 }

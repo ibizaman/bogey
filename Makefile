@@ -74,7 +74,7 @@ ifdef INCPATH_$m
 INCPATH:=$(INCPATH) $(addprefix -I,$(INCPATH_$m))
 endif
 ifdef DEFINE_$m
-DEFINE:=$(DEFINE) $(addprefix -I,$(DEFINE_$m))
+DEFINE:=$(DEFINE) $(addprefix -D,$(DEFINE_$m))
 endif
 
 #####################
@@ -88,7 +88,7 @@ compile: $(OBJECTS)
 	$(CXX) -o $(BUILD_DIR)$(EXECUTABLE) $(LDFLAGS) $(OBJECTS)
 
 $(OBJECTS_DIR)%.o: %.cpp
-	$(CXX) -c $< -o $@ $(INCPATH) $(CXXFLAGS)
+	$(CXX) -c $< -o $@ $(INCPATH) $(DEFINE) $(CXXFLAGS)
 
 # DEPENDECIES CHECK
 ifneq ($(has_build_dir),)
