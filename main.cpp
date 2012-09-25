@@ -2,9 +2,11 @@
 #include <osg/Group>
 #include <osg/Geode>
 #include <osg/PolygonMode>
+#include <osg/MatrixTransform>
 #include <osgViewer/Viewer>
 #include <osgGA/TrackballManipulator>
 #include "object/ShadedSquare.h"
+#include "lib/KeyboardEventHandler.h"
 
 #ifdef DEBUG
 #include <osgViewer/ViewerEventHandlers>
@@ -19,8 +21,12 @@ int main(int argc, char* argv[])
     osg::ref_ptr<ShadedSquare> hello(new ShadedSquare(vertexShader, fragmentShader));
     hello->init();
 
+    osg::ref_ptr<osg::MatrixTransform> cameraTransform(new osg::MatrixTransform());
+    cameraTransform->addChild(hello);
+
     osg::ref_ptr<osg::Group> root(new osg::Group());
     root->addChild(hello);
+    root->addChild(cameraTransform);
 
     osg::ref_ptr<osg::StateSet> ss = root->getOrCreateStateSet();
 
@@ -33,7 +39,6 @@ int main(int argc, char* argv[])
     fog->setEnd(100);
     ss->setAttributeAndModes(fog);
 
-
     osg::ref_ptr<osgViewer::Viewer> viewer(new osgViewer::Viewer());
     viewer->setCameraManipulator(new osgGA::TrackballManipulator());
     viewer->getCameraManipulator()->setHomePosition(
@@ -44,8 +49,12 @@ int main(int argc, char* argv[])
     viewer->getCamera()->setClearColor(fogColor);
     viewer->setSceneData(root);
     viewer->home();
+
+    viewer->addEventHandler(new KeyboardEventHandler(cameraTransform));
 #ifdef DEBUG
-    viewer->addEventHandler(new osgViewer::StatsHandler);
+    osg::ref_ptr<osgViewer::StatsHandler> statEvent(new osgViewer::StatsHandler());
+    statEvent->setKeyEventTogglesOnScreenStats('p');
+    viewer->addEventHandler(statEvent);
 #endif
 
     viewer->run();
