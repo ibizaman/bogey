@@ -4,7 +4,7 @@
 #include <osg/PolygonMode>
 #include <osg/MatrixTransform>
 #include <osgViewer/Viewer>
-#include <osgGA/TrackballManipulator>
+#include <osgGA/NodeTrackerManipulator>
 #include "object/ShadedSquare.h"
 #include "lib/KeyboardEventHandler.h"
 
@@ -14,8 +14,8 @@
 
 int main(int argc, char* argv[])
 {
-    const osg::Vec4 fogColor(0.5, 0.5, 1, 1.0);
-
+    // Graph
+    // -----
     std::string vertexShader = argc >= 2 ? argv[1] : "shader/hello.vert";
     std::string fragmentShader = "shader/hello.frag";
     osg::ref_ptr<ShadedSquare> hello(new ShadedSquare(vertexShader, fragmentShader));
@@ -28,10 +28,13 @@ int main(int argc, char* argv[])
     root->addChild(hello);
     root->addChild(cameraTransform);
 
+    // Fog & Lightning
+    // ---------------
     osg::ref_ptr<osg::StateSet> ss = root->getOrCreateStateSet();
 
     ss->setMode(GL_LIGHTING, osg::StateAttribute::OFF);
 
+    const osg::Vec4 fogColor(0.5, 0.5, 1, 1.0);
     osg::ref_ptr<osg::Fog> fog(new osg::Fog());
     fog->setMode(osg::Fog::LINEAR);
     fog->setColor(fogColor);
@@ -39,17 +42,22 @@ int main(int argc, char* argv[])
     fog->setEnd(100);
     ss->setAttributeAndModes(fog);
 
+    // Viewer
+    // ------
     osg::ref_ptr<osgViewer::Viewer> viewer(new osgViewer::Viewer());
-    viewer->setCameraManipulator(new osgGA::TrackballManipulator());
-    viewer->getCameraManipulator()->setHomePosition(
+
+    // Camera & manipulator
+    osg::ref_ptr<osgGA::NodeTrackerManipulator> manipulator(new osgGA::NodeTrackerManipulator());
+    manipulator->setTrackNode(hello);
+    manipulator->setHomePosition(
             osg::Vec3d(0.0, 0.0, 10.0),
             osg::Vec3d(0.0, 0.0, 0.0),
             osg::Vec3d(0.0, 1.0, 0.0)
         );
+    viewer->setCameraManipulator(manipulator);
     viewer->getCamera()->setClearColor(fogColor);
-    viewer->setSceneData(root);
-    viewer->home();
 
+    // Handlers
     viewer->addEventHandler(new KeyboardEventHandler(cameraTransform));
 #ifdef DEBUG
     osg::ref_ptr<osgViewer::StatsHandler> statEvent(new osgViewer::StatsHandler());
