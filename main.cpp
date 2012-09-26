@@ -65,6 +65,8 @@ int main(int argc, char* argv[])
     viewer->addEventHandler(statEvent);
 #endif
 
+    viewer->setSceneData(root);
+
     viewer->run();
 }
 
