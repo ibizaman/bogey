@@ -3,6 +3,7 @@
 #include <osg/Geode>
 #include <osg/PolygonMode>
 #include <osg/MatrixTransform>
+#include <osg/PositionAttitudeTransform>
 #include <osgViewer/Viewer>
 #include <osgGA/NodeTrackerManipulator>
 #include "object/ShadedSquare.h"
@@ -23,9 +24,15 @@ int main(int argc, char* argv[])
 
     osg::ref_ptr<osg::MatrixTransform> cameraTransform(new osg::MatrixTransform());
     cameraTransform->addChild(hello);
+    // Terrain
+    // -------
+    osg::ref_ptr<osg::PositionAttitudeTransform> terrainTransform(new osg::PositionAttitudeTransform());
+    terrainTransform->addChild(hello);
+    terrainTransform->setPosition(osg::Vec3d(0,0,-1));
+    terrainTransform->setScale(osg::Vec3d(10,10,1));
 
     osg::ref_ptr<osg::Group> root(new osg::Group());
-    root->addChild(hello);
+    root->addChild(terrainTransform);
     root->addChild(cameraTransform);
 
     // Fog & Lightning
