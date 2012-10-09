@@ -7,7 +7,8 @@
 #include <osgViewer/Viewer>
 #include <osgGA/NodeTrackerManipulator>
 #include "object/ShadedSquare.h"
-#include "lib/KeyboardEventHandler.h"
+#include "handler/InputEventHandler.h"
+#include "state/PlayerState.h"
 
 #ifdef DEBUG
 #include <osgViewer/ViewerEventHandlers>
@@ -22,8 +23,12 @@ int main(int argc, char* argv[])
     osg::ref_ptr<ShadedSquare> hello(new ShadedSquare(vertexShader, fragmentShader));
     hello->init();
 
+    // Player
+    // ------
     osg::ref_ptr<osg::MatrixTransform> cameraTransform(new osg::MatrixTransform());
     cameraTransform->addChild(hello);
+    osg::ref_ptr<PlayerState> playerState(new PlayerState());
+
     // Terrain
     // -------
     osg::ref_ptr<osg::PositionAttitudeTransform> terrainTransform(new osg::PositionAttitudeTransform());
@@ -65,7 +70,7 @@ int main(int argc, char* argv[])
     viewer->getCamera()->setClearColor(fogColor);
 
     // Handlers
-    viewer->addEventHandler(new KeyboardEventHandler(cameraTransform));
+    viewer->addEventHandler(new InputEventHandler(playerState));
 #ifdef DEBUG
     osg::ref_ptr<osgViewer::StatsHandler> statEvent(new osgViewer::StatsHandler());
     statEvent->setKeyEventTogglesOnScreenStats('p');

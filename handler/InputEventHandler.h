@@ -1,23 +1,21 @@
-#ifndef KEYBOARDEVENTHANDLER_H
-#define KEYBOARDEVENTHANDLER_H
+#ifndef INPUTEVENTHANDLER_H
+#define INPUTEVENTHANDLER_H
 
 #include <osgGA/GUIEventHandler>
 #include <osgGA/GUIEventAdapter>
 #include <osgGA/GUIActionAdapter>
 #include <osg/Object>
 #include <osg/NodeVisitor>
-#include <osg/MatrixTransform>
+#include "state/PlayerState.h"
 
-class KeyboardEventHandler : public osgGA::GUIEventHandler
+class InputEventHandler : public osgGA::GUIEventHandler
 {
 public:
-    typedef osg::ref_ptr<osg::MatrixTransform> Transform;
-public:
-    KeyboardEventHandler(Transform);
+    InputEventHandler(osg::ref_ptr<PlayerState>);
 
     virtual bool handle(const osgGA::GUIEventAdapter&, osgGA::GUIActionAdapter&, osg::Object*, osg::NodeVisitor*);
 
 private:
-    Transform _transform;
+    osg::ref_ptr<PlayerState> _state;
 };
 #endif
