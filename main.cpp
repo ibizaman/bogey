@@ -2,13 +2,14 @@
 #include <osg/Group>
 #include <osg/Geode>
 #include <osg/PolygonMode>
-#include <osg/MatrixTransform>
 #include <osg/PositionAttitudeTransform>
 #include <osgViewer/Viewer>
 #include <osgGA/NodeTrackerManipulator>
 #include "object/ShadedSquare.h"
 #include "handler/InputEventHandler.h"
 #include "state/PlayerState.h"
+#include "transform/PlayerTransform.h"
+#include "callback/PlayerAnimationCallback.h"
 
 #ifdef DEBUG
 #include <osgViewer/ViewerEventHandlers>
@@ -25,9 +26,11 @@ int main(int argc, char* argv[])
 
     // Player
     // ------
-    osg::ref_ptr<osg::MatrixTransform> cameraTransform(new osg::MatrixTransform());
-    cameraTransform->addChild(hello);
+    osg::ref_ptr<PlayerTransform> playerTransform(new PlayerTransform());
+    playerTransform->addChild(hello);
+    playerTransform->setPosition(osg::Vec3d(1,0,0));
     osg::ref_ptr<PlayerState> playerState(new PlayerState());
+    playerTransform->addUpdateCallback(new PlayerAnimationCallback(playerState));
 
     // Terrain
     // -------
@@ -38,7 +41,7 @@ int main(int argc, char* argv[])
 
     osg::ref_ptr<osg::Group> root(new osg::Group());
     root->addChild(terrainTransform);
-    root->addChild(cameraTransform);
+    root->addChild(playerTransform);
 
     // Fog & Lightning
     // ---------------
