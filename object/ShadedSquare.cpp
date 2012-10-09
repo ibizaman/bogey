@@ -1,5 +1,5 @@
 #include "ShadedSquare.h"
-#include "lib/UpdateTimerCallback.h"
+#include "callback/UpdateTimerCallback.h"
 
 #include <osgDB/ReadFile>
 

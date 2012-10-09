@@ -1,10 +1,10 @@
 EXECUTABLE=bogey
 
 SOURCES=main.cpp\
+	callback/UpdateTimerCallback.cpp\
 	object/ShadedSquare.cpp\
 	lib/BaseDrawableGeode.cpp\
 	lib/KeyboardEventHandler.cpp\
-	lib/UpdateTimerCallback.cpp\
 
 CXX=g++
 CXXFLAGS=-Wall\
