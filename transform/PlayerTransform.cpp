@@ -140,6 +140,9 @@ inline osg::Vec3d PlayerTransform::getLeft()
 
 inline osg::Vec3d PlayerTransform::getForward()
 {
-    return getAttitude() * osg::Vec3d(1,0,0);
+    osg::Vec3d attitude = getAttitude() * osg::Vec3d(1,0,0);
+    attitude.z() = 0;
+    attitude.normalize();
+    return attitude;
 }
 
