@@ -65,9 +65,9 @@ int main(int argc, char* argv[])
     osg::ref_ptr<osgGA::NodeTrackerManipulator> manipulator(new osgGA::NodeTrackerManipulator());
     manipulator->setTrackNode(hello);
     manipulator->setHomePosition(
-            osg::Vec3d(0.0, 0.0, 10.0),
-            osg::Vec3d(0.0, 0.0, 0.0),
-            osg::Vec3d(0.0, 1.0, 0.0)
+            osg::Vec3d(-10.0, 0.0, 10.0),
+            osg::Vec3d(0.0, 0.0, 7.0),
+            osg::Vec3d(0.0, 0.0, 1.0)
         );
     viewer->setCameraManipulator(manipulator);
     viewer->getCamera()->setClearColor(fogColor);
