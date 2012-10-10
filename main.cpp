@@ -72,6 +72,17 @@ int main(int argc, char* argv[])
     viewer->setCameraManipulator(manipulator);
     viewer->getCamera()->setClearColor(fogColor);
 
+    // Disable cursor
+    viewer->realize();
+    osgViewer::Viewer::Windows windows;
+    viewer->getWindows(windows);
+    for (osgViewer::Viewer::Windows::iterator window = windows.begin(); window != windows.end(); ++window) {
+        (*window)->useCursor(false);
+        int x,y,width,height;
+        (*window)->getWindowRectangle(x, y, width, height);
+        viewer->requestWarpPointer(x + width/2, y + height/2);
+    }
+
     // Handlers
     viewer->addEventHandler(new InputEventHandler(playerState));
 #ifdef DEBUG
