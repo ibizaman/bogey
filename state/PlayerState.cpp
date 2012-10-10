@@ -4,7 +4,9 @@ PlayerState::PlayerState()
     : moveForward(false),
       moveBackward(false),
       moveLeft(false),
-      moveRight(false)
+      moveRight(false),
+      rotateHorizontally(false),
+      rotateVertically(false)
 {
 }
 
@@ -13,4 +15,6 @@ void PlayerState::reset() {
     moveBackward = false;
     moveLeft = false;
     moveRight = false;
+    rotateHorizontally = false;
+    rotateVertically = false;
 }

@@ -16,6 +16,8 @@ public:
     void backward();
     void left();
     void right();
+    void rotateHorizontally(double);
+    void rotateVertically(double);
 
 protected:
     inline osg::Vec3d getUp();
@@ -34,6 +36,8 @@ private:
     double _sideStopAcceleration;
     double _sideBrakeAcceleration;
     double _stopTrigger;
+    double _pitch;
+    double _maxPitch;
 };
 
 #endif

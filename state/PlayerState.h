@@ -14,6 +14,8 @@ public:
     bool moveBackward;
     bool moveLeft;
     bool moveRight;
+    float rotateHorizontally;
+    float rotateVertically;
 };
 
 #endif

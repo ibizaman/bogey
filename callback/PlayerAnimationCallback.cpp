@@ -29,6 +29,12 @@ void PlayerAnimationCallback::operator()(osg::Node* node, osg::NodeVisitor* visi
             pat->right();
         }
 
+        pat->rotateVertically(_state->rotateVertically * osg::PI/2);
+        _state->rotateVertically = 0;
+
+        pat->rotateHorizontally(_state->rotateHorizontally * osg::PI/2);
+        _state->rotateHorizontally = 0;
+
         pat->update(t - _previousTime);
         _previousTime = t;
 

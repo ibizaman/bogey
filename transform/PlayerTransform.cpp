@@ -10,7 +10,9 @@ PlayerTransform::PlayerTransform()
       _sideAcceleration(50),
       _sideStopAcceleration(60),
       _sideBrakeAcceleration(100),
-      _stopTrigger(1)
+      _stopTrigger(1),
+      _pitch(0),
+      _maxPitch(osg::PI/2 - 1e-3)
 {
 }
 
@@ -24,7 +26,9 @@ PlayerTransform::PlayerTransform(const osg::PositionAttitudeTransform& transform
       _sideAcceleration(50),
       _sideStopAcceleration(60),
       _sideBrakeAcceleration(100),
-      _stopTrigger(1)
+      _stopTrigger(1),
+      _pitch(0),
+      _maxPitch(osg::PI/2 - 1e-3)
 {
 }
 
@@ -106,6 +110,22 @@ void PlayerTransform::left()
 void PlayerTransform::right()
 {
     --_sideDirection;
+}
+
+void PlayerTransform::rotateHorizontally(double da)
+{
+    setAttitude(getAttitude() * osg::Quat(da, getUp()));
+}
+
+void PlayerTransform::rotateVertically(double da)
+{
+    if (_pitch + da > _maxPitch) {
+        da = _maxPitch - _pitch;
+    } else if (_pitch + da < -_maxPitch) {
+        da = -_maxPitch - _pitch;
+    }
+    _pitch += da;
+    setAttitude(getAttitude() * osg::Quat(da, getLeft()));
 }
 
 inline osg::Vec3d PlayerTransform::getUp()

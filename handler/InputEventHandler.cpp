@@ -14,6 +14,11 @@ bool InputEventHandler::handle(const osgGA::GUIEventAdapter& event, osgGA::GUIAc
     bool handled = true;
     switch (event.getEventType()) {
 
+        case osgGA::GUIEventAdapter::MOVE:
+            _state->rotateHorizontally -= event.getXnormalized();
+            _state->rotateVertically += event.getYnormalized();
+            break;
+
         case osgGA::GUIEventAdapter::KEYDOWN:
             switch (event.getKey()) {
                 case 'z': case 'Z':
