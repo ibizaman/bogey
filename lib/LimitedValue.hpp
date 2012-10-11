@@ -82,9 +82,21 @@ void LimitedValue<T>::setMin(const T& min)
 }
 
 template<typename T>
+const T& LimitedValue<T>::getMin() const
+{
+    return _min;
+}
+
+template<typename T>
 void LimitedValue<T>::setMax(const T& max)
 {
     _max = max;
+}
+
+template<typename T>
+const T& LimitedValue<T>::getMax() const
+{
+    return _max;
 }
 
 template<typename T>

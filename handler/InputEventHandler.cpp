@@ -34,6 +34,9 @@ bool InputEventHandler::handle(const osgGA::GUIEventAdapter& event, osgGA::GUIAc
                 case 'd': case 'D':
                     _state->moveRight = true;
                     break;
+                case osgGA::GUIEventAdapter::KEY_Shift_L:
+                    _state->sprint = true;
+                    break;
                 default:
                     handled = false;
                     break;
@@ -53,6 +56,9 @@ bool InputEventHandler::handle(const osgGA::GUIEventAdapter& event, osgGA::GUIAc
                     break;
                 case 'd': case 'D':
                     _state->moveRight = false;
+                    break;
+                case osgGA::GUIEventAdapter::KEY_Shift_L:
+                    _state->sprint = false;
                     break;
                 default:
                     handled = false;

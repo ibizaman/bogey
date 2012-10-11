@@ -16,6 +16,7 @@ public:
     bool moveRight;
     float rotateHorizontally;
     float rotateVertically;
+    bool sprint;
 };
 
 #endif

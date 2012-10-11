@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
     // ------
     osg::ref_ptr<PlayerTransform> playerTransform(new PlayerTransform());
     playerTransform->addChild(hello);
-    playerTransform->setPosition(osg::Vec3d(1,0,0));
+    playerTransform->setPosition(osg::Vec3d(-2000,0,50));
     osg::ref_ptr<PlayerState> playerState(new PlayerState());
     playerTransform->addUpdateCallback(new PlayerAnimationCallback(playerState));
 
@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
     osg::ref_ptr<osg::PositionAttitudeTransform> terrainTransform(new osg::PositionAttitudeTransform());
     terrainTransform->addChild(hello);
     terrainTransform->setPosition(osg::Vec3d(0,0,-1));
-    terrainTransform->setScale(osg::Vec3d(10,10,1));
+    terrainTransform->setScale(osg::Vec3d(1000,1000,1));
 
     osg::ref_ptr<osg::Group> root(new osg::Group());
     root->addChild(terrainTransform);

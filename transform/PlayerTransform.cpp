@@ -3,9 +3,11 @@
 PlayerTransform::PlayerTransform()
     : osg::PositionAttitudeTransform(),
       _frontSpeed(0,-70,200),
-      _frontAcceleration(30),
-      _frontStopAcceleration(50),
-      _frontBrakeAcceleration(80),
+      _frontAcceleration(70),
+      _frontStopAcceleration(100),
+      _frontBrakeAcceleration(150),
+      _frontMaxWalkSpeed(200),
+      _frontMaxSprintSpeed(400),
       _sideSpeed(0,-120,120),
       _sideAcceleration(50),
       _sideStopAcceleration(60),
@@ -19,9 +21,11 @@ PlayerTransform::PlayerTransform()
 PlayerTransform::PlayerTransform(const osg::PositionAttitudeTransform& transform, const osg::CopyOp& copyop)
     : osg::PositionAttitudeTransform(transform, copyop),
       _frontSpeed(0,-70,200),
-      _frontAcceleration(30),
-      _frontStopAcceleration(50),
-      _frontBrakeAcceleration(80),
+      _frontAcceleration(70),
+      _frontStopAcceleration(100),
+      _frontBrakeAcceleration(150),
+      _frontMaxWalkSpeed(200),
+      _frontMaxSprintSpeed(400),
       _sideSpeed(0,-120,120),
       _sideAcceleration(50),
       _sideStopAcceleration(60),
@@ -36,7 +40,9 @@ void PlayerTransform::update(double dt)
 {
     switch (_frontDirection.state()) {
         case TriState::PLUS: // Forward
-            if (_frontSpeed >= 0) {
+            if (_frontSpeed > _frontSpeed.getMax()) {
+                _frontSpeed -= _frontStopAcceleration * dt;
+            } else if (_frontSpeed >= 0) {
                 _frontSpeed += _frontAcceleration * dt;
             } else {
                 _frontSpeed += _frontBrakeAcceleration * dt;
@@ -52,7 +58,9 @@ void PlayerTransform::update(double dt)
             }
             break;
         case TriState::MINUS: // Backward
-            if (_frontSpeed <= 0) {
+            if (_frontSpeed < _frontSpeed.getMin()) {
+                _frontSpeed += _frontStopAcceleration * dt;
+            } else if (_frontSpeed <= 0) {
                 _frontSpeed -= _frontAcceleration * dt;
             } else {
                 _frontSpeed -= _frontBrakeAcceleration * dt;
@@ -62,7 +70,9 @@ void PlayerTransform::update(double dt)
 
     switch (_sideDirection.state()) {
         case TriState::MINUS: // Right
-            if (_sideSpeed >= 0) {
+            if (_sideSpeed > _sideSpeed.getMax()) {
+                _sideSpeed -= _sideStopAcceleration * dt;
+            } else if (_sideSpeed >= 0) {
                 _sideSpeed += _sideAcceleration * dt;
             } else {
                 _sideSpeed += _sideBrakeAcceleration * dt;
@@ -78,7 +88,9 @@ void PlayerTransform::update(double dt)
             }
             break;
         case TriState::PLUS: // Left
-            if (_sideSpeed <= 0) {
+            if (_sideSpeed < _sideSpeed.getMin()) {
+                _sideSpeed += _sideStopAcceleration * dt;
+            } else if (_sideSpeed <= 0) {
                 _sideSpeed -= _sideAcceleration * dt;
             } else {
                 _sideSpeed -= _sideBrakeAcceleration * dt;
@@ -110,6 +122,15 @@ void PlayerTransform::left()
 void PlayerTransform::right()
 {
     --_sideDirection;
+}
+
+void PlayerTransform::sprint(bool sprint)
+{
+    if (sprint) {
+        _frontSpeed.setMax(_frontMaxSprintSpeed);
+    } else {
+        _frontSpeed.setMax(_frontMaxWalkSpeed);
+    }
 }
 
 void PlayerTransform::rotateHorizontally(double da)

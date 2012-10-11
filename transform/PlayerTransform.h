@@ -16,6 +16,7 @@ public:
     void backward();
     void left();
     void right();
+    void sprint(bool);
     void rotateHorizontally(double);
     void rotateVertically(double);
 
@@ -31,6 +32,8 @@ private:
     double _frontAcceleration;
     double _frontStopAcceleration;
     double _frontBrakeAcceleration;
+    double _frontMaxWalkSpeed;
+    double _frontMaxSprintSpeed;
     LimitedValue<double> _sideSpeed;
     double _sideAcceleration;
     double _sideStopAcceleration;

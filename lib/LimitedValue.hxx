@@ -20,7 +20,9 @@ public:
     template<typename V>
     friend std::ostream& operator<<(std::ostream&, const LimitedValue<V>&);
     void setMin(const T&);
+    const T& getMin() const;
     void setMax(const T&);
+    const T& getMax() const;
     const T& value() const;
 
 private:
