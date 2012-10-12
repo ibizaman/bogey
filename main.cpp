@@ -22,13 +22,13 @@ int main(int argc, char* argv[])
 	
     // Graph
     // -----
-	osg::ref_ptr<Cube> cube(new Cube());
-	
+    osg::ref_ptr<Cube> cube(new Cube());
+
     // Player
     // ------
     osg::ref_ptr<PlayerTransform> playerTransform(new PlayerTransform());
     playerTransform->addChild(cube);
-	playerTransform->setPosition(osg::Vec3d(-2000,0,50));
+    playerTransform->setPosition(osg::Vec3d(-2000,0,0));
     osg::ref_ptr<PlayerState> playerState(new PlayerState());
     playerTransform->addUpdateCallback(new PlayerAnimationCallback(playerState));
 
