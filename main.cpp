@@ -5,11 +5,11 @@
 #include <osg/PositionAttitudeTransform>
 #include <osgViewer/Viewer>
 #include <osgGA/NodeTrackerManipulator>
-#include "object/ShadedSquare.h"
 #include "handler/InputEventHandler.h"
 #include "state/PlayerState.h"
 #include "transform/PlayerTransform.h"
 #include "callback/PlayerAnimationCallback.h"
+#include "lib/Cube.h"
 
 #ifdef DEBUG
 #include <osgViewer/ViewerEventHandlers>
@@ -17,31 +17,32 @@
 
 int main(int argc, char* argv[])
 {
+	(void) argc;
+	(void) argv;
+	
     // Graph
     // -----
-    std::string vertexShader = argc >= 2 ? argv[1] : "shader/hello.vert";
-    std::string fragmentShader = "shader/hello.frag";
-    osg::ref_ptr<ShadedSquare> hello(new ShadedSquare(vertexShader, fragmentShader));
-    hello->init();
-
+	osg::ref_ptr<Cube> cube(new Cube());
+	
     // Player
     // ------
     osg::ref_ptr<PlayerTransform> playerTransform(new PlayerTransform());
-    playerTransform->addChild(hello);
-    playerTransform->setPosition(osg::Vec3d(-2000,0,50));
+    playerTransform->addChild(cube);
+	playerTransform->setPosition(osg::Vec3d(-2000,0,50));
     osg::ref_ptr<PlayerState> playerState(new PlayerState());
     playerTransform->addUpdateCallback(new PlayerAnimationCallback(playerState));
 
     // Terrain
     // -------
     osg::ref_ptr<osg::PositionAttitudeTransform> terrainTransform(new osg::PositionAttitudeTransform());
-    terrainTransform->addChild(hello);
-    terrainTransform->setPosition(osg::Vec3d(0,0,-1));
+    terrainTransform->addChild(cube);
+    terrainTransform->setPosition(osg::Vec3d(0,0,-2));
     terrainTransform->setScale(osg::Vec3d(1000,1000,1));
 
     osg::ref_ptr<osg::Group> root(new osg::Group());
     root->addChild(terrainTransform);
     root->addChild(playerTransform);
+    root->addChild(cube);
 
     // Fog & Lightning
     // ---------------
@@ -49,13 +50,13 @@ int main(int argc, char* argv[])
 
     ss->setMode(GL_LIGHTING, osg::StateAttribute::OFF);
 
-    const osg::Vec4 fogColor(0.5, 0.5, 1, 1.0);
+    const osg::Vec4 fogColor(0.796, 0.996, 0.996, 1.0);
     osg::ref_ptr<osg::Fog> fog(new osg::Fog());
     fog->setMode(osg::Fog::LINEAR);
     fog->setColor(fogColor);
     fog->setStart(15);
     fog->setEnd(100);
-    ss->setAttributeAndModes(fog);
+    // ss->setAttributeAndModes(fog);
 
     // Viewer
     // ------
@@ -63,7 +64,7 @@ int main(int argc, char* argv[])
 
     // Camera & manipulator
     osg::ref_ptr<osgGA::NodeTrackerManipulator> manipulator(new osgGA::NodeTrackerManipulator());
-    manipulator->setTrackNode(hello);
+    manipulator->setTrackNode(cube);
     manipulator->setHomePosition(
             osg::Vec3d(-10.0, 0.0, 10.0),
             osg::Vec3d(0.0, 0.0, 7.0),

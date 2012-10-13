@@ -4,10 +4,9 @@ SOURCES=main.cpp\
 	callback/PlayerAnimationCallback.cpp\
 	callback/UpdateTimerCallback.cpp\
 	handler/InputEventHandler.cpp\
-	object/ShadedSquare.cpp\
 	state/PlayerState.cpp\
 	transform/PlayerTransform.cpp\
-	lib/BaseDrawableGeode.cpp\
+	lib/Cube.cpp\
 	lib/TriState.cpp\
 
 CXX=g++
