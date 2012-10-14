@@ -162,5 +162,9 @@ void Cube::createTexture(Texture& texture)
     texture.texture2D->setFilter(osg::Texture::MIN_FILTER, osg::Texture::NEAREST);
     texture.texture2D->setFilter(osg::Texture::MAG_FILTER, osg::Texture::NEAREST);
     texture.texture2D->setWrap( osg::Texture::WRAP_R, osg::Texture::REPEAT );
-    texture.texture2D->setImage(osgDB::readImageFile("texture/wood.tga"));	
+    osg::Image* face = osgDB::readImageFile("texture/wood.tga");
+    if (!face) {
+        throw ErrorOpeningFileException("texture/wood.tga");
+    }
+    texture.texture2D->setImage(face);
 }

@@ -8,6 +8,7 @@ SOURCES=main.cpp\
 	transform/PlayerTransform.cpp\
 	lib/Cube.cpp\
 	lib/TriState.cpp\
+	exception/BaseException.cpp\
 
 CXX=g++
 CXXFLAGS=-Wall\
