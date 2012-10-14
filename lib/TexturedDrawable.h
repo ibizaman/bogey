@@ -1,28 +1,25 @@
-#ifndef GEOMETRYGEODE_H
-#define GEOMETRYGEODE_H
+#ifndef TEXTUREDDRAWABLE_H
+#define TEXTUREDDRAWABLE_H
 
-#include <osg/Geode>
-#include <osg/Texture2D>
+#include <osg/Geometry>
 #include <list>
 
-class GeometryGeode : public osg::Geode
+class TexturedDrawable : public osg::Geometry
 {
 public:
     void init();
 
 protected:
-    struct Texture {
-        osg::ref_ptr<osg::Texture2D> texture2D;
-        osg::ref_ptr<osg::Vec2Array> coords;
-    };
     typedef osg::ref_ptr<osg::Vec4Array> Vertices;
     typedef osg::ref_ptr<osg::DrawElementsUInt> Element;
     typedef std::list<Element> ElementsList;
+    typedef osg::ref_ptr<osg::Vec2Array> TextureCoords;
 
 protected:
     virtual void createVertices(Vertices&) = 0;
     virtual void createElements(ElementsList&) = 0;
-    virtual void createTexture(Texture&) = 0;
+    virtual void createTextureCoords(TextureCoords&) = 0;
 };
 
 #endif
+

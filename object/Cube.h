@@ -1,21 +1,21 @@
 #ifndef CUBE_H
 #define CUBE_H
 
-#include "lib/GeometryGeode.h"
+#include "lib/TexturingGeode.h"
+#include <map>
+#include "object/Face.h"
 
-class Cube : public GeometryGeode
+class Cube : public TexturingGeode
 {
 public:
     Cube();
-    void init();
 
 protected:
-    void createVertices(Vertices&);
-    void createElements(ElementsList&);
     void createTexture(Texture&);
 
 private:
-    int _attribLocation;
+    typedef std::map< Face::Direction, osg::ref_ptr<Face> > Faces;
+    Faces _faces;
 };
 
 #endif

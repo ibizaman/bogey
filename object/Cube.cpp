@@ -3,138 +3,27 @@
 #include "exception/ErrorOpeningFileException.h"
 
 Cube::Cube() 
-    : GeometryGeode()
+    : TexturingGeode()
 {
+    _faces[Face::TOP]    = new Face(Face::TOP);
+    _faces[Face::BOTTOM] = new Face(Face::BOTTOM);
+    _faces[Face::FRONT]  = new Face(Face::FRONT);
+    _faces[Face::BACK]   = new Face(Face::BACK);
+    _faces[Face::LEFT]   = new Face(Face::LEFT);
+    _faces[Face::RIGHT]  = new Face(Face::RIGHT);
+
+    for (Faces::iterator it = _faces.begin(); it != _faces.end(); ++it) {
+        addDrawable(it->second);
+    }
     init();
-}
-
-void Cube::init()
-{
-    GeometryGeode::init();
-}
-
-void Cube::createVertices(Vertices& vertices)
-{
-    float x = 1.0;
-    // front side
-    vertices->push_back(osg::Vec4(-x,-x, x, 1));
-    vertices->push_back(osg::Vec4(-x, x, x, 1));
-    vertices->push_back(osg::Vec4( x,-x, x, 1));
-    vertices->push_back(osg::Vec4( x, x, x, 1));
-    // back side    
-    vertices->push_back(osg::Vec4(-x,-x,-x, 1));
-    vertices->push_back(osg::Vec4(-x, x,-x, 1));
-    vertices->push_back(osg::Vec4( x,-x,-x, 1));
-    vertices->push_back(osg::Vec4( x, x,-x, 1));
-    // left side    
-    vertices->push_back(osg::Vec4(-x,-x,-x, 1));
-    vertices->push_back(osg::Vec4(-x, x,-x, 1));
-    vertices->push_back(osg::Vec4(-x,-x, x, 1));
-    vertices->push_back(osg::Vec4(-x, x, x, 1));
-    // right side
-    vertices->push_back(osg::Vec4( x,-x, x, 1));
-    vertices->push_back(osg::Vec4( x, x, x, 1));
-    vertices->push_back(osg::Vec4( x,-x,-x, 1));
-    vertices->push_back(osg::Vec4( x, x,-x, 1));
-    // up side
-    vertices->push_back(osg::Vec4(-x, x, x, 1));
-    vertices->push_back(osg::Vec4(-x, x,-x, 1));
-    vertices->push_back(osg::Vec4( x, x, x, 1));
-    vertices->push_back(osg::Vec4( x, x,-x, 1));
-    // down side
-    vertices->push_back(osg::Vec4(-x,-x,-x, 1));
-    vertices->push_back(osg::Vec4(-x,-x, x, 1));
-    vertices->push_back(osg::Vec4( x,-x,-x, 1));
-    vertices->push_back(osg::Vec4( x,-x, x, 1));
-}
-
-void Cube::createElements(ElementsList& elements)
-{
-    Element surface0(new osg::DrawElementsUInt(osg::PrimitiveSet::TRIANGLE_STRIP, 0));
-    surface0->push_back(0);
-    surface0->push_back(1);
-    surface0->push_back(2);
-    surface0->push_back(3);
-    elements.push_back(surface0);
-
-    Element surface1(new osg::DrawElementsUInt(osg::PrimitiveSet::TRIANGLE_STRIP, 0));
-    surface1->push_back(4);
-    surface1->push_back(5);
-    surface1->push_back(6);
-    surface1->push_back(7);
-    elements.push_back(surface1);
-    
-    Element surface2(new osg::DrawElementsUInt(osg::PrimitiveSet::TRIANGLE_STRIP, 0));
-    surface2->push_back(8);
-    surface2->push_back(9);
-    surface2->push_back(10);
-    surface2->push_back(11);
-    elements.push_back(surface2);
-    
-    Element surface3(new osg::DrawElementsUInt(osg::PrimitiveSet::TRIANGLE_STRIP, 0));
-    surface3->push_back(12);
-    surface3->push_back(13);
-    surface3->push_back(14);
-    surface3->push_back(15);
-    elements.push_back(surface3);
-    
-    Element surface4(new osg::DrawElementsUInt(osg::PrimitiveSet::TRIANGLE_STRIP, 0));
-    surface4->push_back(16);
-    surface4->push_back(17);
-    surface4->push_back(18);
-    surface4->push_back(19);
-    elements.push_back(surface4);
-    
-    Element surface5(new osg::DrawElementsUInt(osg::PrimitiveSet::TRIANGLE_STRIP, 0));
-    surface5->push_back(20);
-    surface5->push_back(21);
-    surface5->push_back(22);
-    surface5->push_back(23);
-    elements.push_back(surface5);
 }
 
 void Cube::createTexture(Texture& texture)
 {
-    //front side
-    texture.coords = new osg::Vec2Array;
-    texture.coords->push_back(osg::Vec2(0.0f, 0.5f));
-    texture.coords->push_back(osg::Vec2(0.0f, 1.0f));
-    texture.coords->push_back(osg::Vec2(0.5f, 0.5f));
-    texture.coords->push_back(osg::Vec2(0.5f, 1.0f));
-    //back side
-    texture.coords->push_back(osg::Vec2(0.0f, 0.5f));
-    texture.coords->push_back(osg::Vec2(0.0f, 1.0f));
-    texture.coords->push_back(osg::Vec2(0.5f, 0.5f));
-    texture.coords->push_back(osg::Vec2(0.5f, 1.0f));
-    //left side
-    texture.coords->push_back(osg::Vec2(0.0f, 0.5f));
-    texture.coords->push_back(osg::Vec2(0.0f, 1.0f));
-    texture.coords->push_back(osg::Vec2(0.5f, 0.5f));
-    texture.coords->push_back(osg::Vec2(0.5f, 1.0f));
-    //right side
-    texture.coords->push_back(osg::Vec2(0.0f, 0.5f));
-    texture.coords->push_back(osg::Vec2(0.0f, 1.0f));
-    texture.coords->push_back(osg::Vec2(0.5f, 0.5f));
-    texture.coords->push_back(osg::Vec2(0.5f, 1.0f));
-    //up side
-    texture.coords->push_back(osg::Vec2(0.5f, 0.5f));
-    texture.coords->push_back(osg::Vec2(0.5f, 1.0f));
-    texture.coords->push_back(osg::Vec2(1.0f, 0.5f));
-    texture.coords->push_back(osg::Vec2(1.0f, 1.0f));
-    //down side
-    texture.coords->push_back(osg::Vec2(0.5f, 0.5f));
-    texture.coords->push_back(osg::Vec2(0.5f, 1.0f));
-    texture.coords->push_back(osg::Vec2(1.0f, 0.5f));
-    texture.coords->push_back(osg::Vec2(1.0f, 1.0f));
-    
-    texture.texture2D = new osg::Texture2D();
-    texture.texture2D->setDataVariance(osg::Object::DYNAMIC);
-    texture.texture2D->setFilter(osg::Texture::MIN_FILTER, osg::Texture::NEAREST);
-    texture.texture2D->setFilter(osg::Texture::MAG_FILTER, osg::Texture::NEAREST);
-    texture.texture2D->setWrap( osg::Texture::WRAP_R, osg::Texture::REPEAT );
-    osg::Image* face = osgDB::readImageFile("texture/wood.tga");
-    if (!face) {
-        throw ErrorOpeningFileException("texture/wood.tga");
-    }
-    texture.texture2D->setImage(face);
+    texture->setDataVariance(osg::Object::DYNAMIC);
+    texture->setFilter(osg::Texture::MIN_FILTER, osg::Texture::NEAREST);
+    texture->setFilter(osg::Texture::MAG_FILTER, osg::Texture::NEAREST);
+    texture->setWrap( osg::Texture::WRAP_R, osg::Texture::REPEAT );
+
+    setImageFromFile(texture, "texture/wood.tga");
 }

@@ -7,7 +7,9 @@ SOURCES=main.cpp\
 	state/PlayerState.cpp\
 	transform/PlayerTransform.cpp\
 	object/Cube.cpp\
-	lib/GeometryGeode.cpp\
+	object/Face.cpp\
+	lib/TexturedDrawable.cpp\
+	lib/TexturingGeode.cpp\
 	lib/TriState.cpp\
 	exception/BaseException.cpp\
 
