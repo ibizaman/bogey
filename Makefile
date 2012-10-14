@@ -6,7 +6,8 @@ SOURCES=main.cpp\
 	handler/InputEventHandler.cpp\
 	state/PlayerState.cpp\
 	transform/PlayerTransform.cpp\
-	lib/Cube.cpp\
+	object/Cube.cpp\
+	lib/GeometryGeode.cpp\
 	lib/TriState.cpp\
 	exception/BaseException.cpp\
 

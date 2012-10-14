@@ -9,7 +9,7 @@
 #include "state/PlayerState.h"
 #include "transform/PlayerTransform.h"
 #include "callback/PlayerAnimationCallback.h"
-#include "lib/Cube.h"
+#include "object/Cube.h"
 
 #ifdef DEBUG
 #include <osgViewer/ViewerEventHandlers>
