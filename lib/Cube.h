@@ -8,7 +8,7 @@
 class Cube : public osg::Geode
 {
 public:
-    Cube(int = 0);
+    Cube();
     void init();
 
 protected:

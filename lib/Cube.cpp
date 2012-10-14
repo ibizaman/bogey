@@ -4,9 +4,8 @@
 #include <osgDB/ReadFile>
 #include "exception/ErrorOpeningFileException.h"
 
-Cube::Cube(int attribLocation) 
-    : osg::Geode(),
-      _attribLocation(attribLocation)
+Cube::Cube() 
+    : osg::Geode()
 {
     init();
 }
@@ -23,8 +22,7 @@ void Cube::init()
     // vertices
     Vertices vertices(new osg::Vec4Array());
     createVertices(vertices);
-    geometry->setVertexAttribArray(_attribLocation, vertices);
-    geometry->setVertexAttribBinding(_attribLocation, osg::Geometry::BIND_PER_VERTEX);
+    geometry->setVertexArray(vertices);
 
     // elements
     ElementsList elements;
