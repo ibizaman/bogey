@@ -4,11 +4,12 @@
 #include <list>
 #include <osg/Geode>
 #include <osg/Texture2D>
+#include <string>
 
 class Cube : public osg::Geode
 {
 public:
-    Cube();
+    Cube(std::string);
     void init();
 
 protected:
@@ -29,6 +30,7 @@ protected:
 
 private:
     int _attribLocation;
+    std::string _name;
 };
 
 #endif

@@ -4,8 +4,8 @@
 #include <osgDB/ReadFile>
 #include "exception/ErrorOpeningFileException.h"
 
-Cube::Cube() 
-    : osg::Geode()
+Cube::Cube(std::string name) 
+    : osg::Geode() , _name(name)
 {
     init();
 }
@@ -123,46 +123,43 @@ void Cube::createElements(ElementsList& elements)
 
 void Cube::createTexture(Texture& texture)
 {
-    //front side
-    texture.coords = new osg::Vec2Array;
-    texture.coords->push_back(osg::Vec2(0.0f, 0.5f));
-    texture.coords->push_back(osg::Vec2(0.0f, 1.0f));
-    texture.coords->push_back(osg::Vec2(0.5f, 0.5f));
-    texture.coords->push_back(osg::Vec2(0.5f, 1.0f));
-    //back side
-    texture.coords->push_back(osg::Vec2(0.0f, 0.5f));
-    texture.coords->push_back(osg::Vec2(0.0f, 1.0f));
-    texture.coords->push_back(osg::Vec2(0.5f, 0.5f));
-    texture.coords->push_back(osg::Vec2(0.5f, 1.0f));
-    //left side
-    texture.coords->push_back(osg::Vec2(0.0f, 0.5f));
-    texture.coords->push_back(osg::Vec2(0.0f, 1.0f));
-    texture.coords->push_back(osg::Vec2(0.5f, 0.5f));
-    texture.coords->push_back(osg::Vec2(0.5f, 1.0f));
-    //right side
-    texture.coords->push_back(osg::Vec2(0.0f, 0.5f));
-    texture.coords->push_back(osg::Vec2(0.0f, 1.0f));
-    texture.coords->push_back(osg::Vec2(0.5f, 0.5f));
-    texture.coords->push_back(osg::Vec2(0.5f, 1.0f));
-    //up side
-    texture.coords->push_back(osg::Vec2(0.5f, 0.5f));
-    texture.coords->push_back(osg::Vec2(0.5f, 1.0f));
-    texture.coords->push_back(osg::Vec2(1.0f, 0.5f));
-    texture.coords->push_back(osg::Vec2(1.0f, 1.0f));
-    //down side
-    texture.coords->push_back(osg::Vec2(0.5f, 0.5f));
-    texture.coords->push_back(osg::Vec2(0.5f, 1.0f));
-    texture.coords->push_back(osg::Vec2(1.0f, 0.5f));
-    texture.coords->push_back(osg::Vec2(1.0f, 1.0f));
-    
     texture.texture2D = new osg::Texture2D();
     texture.texture2D->setDataVariance(osg::Object::DYNAMIC);
     texture.texture2D->setFilter(osg::Texture::MIN_FILTER, osg::Texture::NEAREST);
     texture.texture2D->setFilter(osg::Texture::MAG_FILTER, osg::Texture::NEAREST);
     texture.texture2D->setWrap( osg::Texture::WRAP_R, osg::Texture::REPEAT );
-    osg::Image* face = osgDB::readImageFile("texture/wood.tga");
+    
+    std::string texLocalisation = "texture/" + _name + ".tga";
+    osg::Image* face = osgDB::readImageFile(texLocalisation);
     if (!face) {
-        throw ErrorOpeningFileException("texture/wood.tga");
+        throw ErrorOpeningFileException(texLocalisation);
     }
     texture.texture2D->setImage(face);
+    if(face->getImageSizeInBytes() <= 16*16*4) {
+        texture.coords = new osg::Vec2Array;
+        for(int i = 1 ; i <= 6 ; i++) {
+            texture.coords->push_back(osg::Vec2(0.0f, 0.0f));
+            texture.coords->push_back(osg::Vec2(0.0f, 1.0f));
+            texture.coords->push_back(osg::Vec2(1.0f, 0.0f));
+            texture.coords->push_back(osg::Vec2(1.0f, 1.0f));
+        }
+    }
+    
+    else {
+        float LD , LU , RD , RU;
+        LD = LU = 0.0;
+        RD = RU = 1.0/6.0; 
+        texture.coords = new osg::Vec2Array;
+        for (int i = 1 ; i <= 6 ; i++) {
+            texture.coords->push_back(osg::Vec2(LD, 0.0f));
+            texture.coords->push_back(osg::Vec2(LU, 1.0f));
+            texture.coords->push_back(osg::Vec2(RD, 0.0f));
+            texture.coords->push_back(osg::Vec2(RU, 1.0f));
+            
+            LD += 1.0/6.0;
+            LU += 1.0/6.0;
+            RD += 1.0/6.0;
+            RU += 1.0/6.0;
+        }
+    }
 }

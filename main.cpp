@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
     
     // Graph
     // -----
-    osg::ref_ptr<Cube> cube(new Cube());
+    osg::ref_ptr<Cube> cube(new Cube("sand"));
 
     // Player
     // ------
