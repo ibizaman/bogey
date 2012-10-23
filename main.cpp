@@ -10,6 +10,8 @@
 #include "transform/PlayerTransform.h"
 #include "callback/PlayerAnimationCallback.h"
 #include "lib/Cube.h"
+#include "shapes/Rectangle.h"
+#include "shapes/Circle.h"
 
 #ifdef DEBUG
 #include <osgViewer/ViewerEventHandlers>
@@ -34,15 +36,12 @@ int main(int argc, char* argv[])
 
     // Terrain
     // -------
-    osg::ref_ptr<osg::PositionAttitudeTransform> terrainTransform(new osg::PositionAttitudeTransform());
-    terrainTransform->addChild(cube);
-    terrainTransform->setPosition(osg::Vec3d(0,0,-2));
-    terrainTransform->setScale(osg::Vec3d(1000,1000,1));
-
+    // osg::ref_ptr<Rectangle> rectangle(new Rectangle("wood" , 5 , 5 , osg::Vec3d(0 , 0 , -2)));
+    osg::ref_ptr<Circle> circle(new Circle("sand" , 15 , osg::Vec3d(0,0,-20)));
     osg::ref_ptr<osg::Group> root(new osg::Group());
-    root->addChild(terrainTransform);
     root->addChild(playerTransform);
-    root->addChild(cube);
+    // root->addChild(rectangle);
+    root->addChild(circle);
 
     // Fog & Lightning
     // ---------------

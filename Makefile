@@ -9,6 +9,8 @@ SOURCES=main.cpp\
 	lib/Cube.cpp\
 	lib/TriState.cpp\
 	exception/BaseException.cpp\
+	shapes/Rectangle.cpp\
+	shapes/Circle.cpp\
 
 CXX=g++
 CXXFLAGS=-Wall\
