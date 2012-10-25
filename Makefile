@@ -14,6 +14,7 @@ SOURCES=main.cpp\
 	exception/BaseException.cpp\
 
 SOURCES_T=test/BaseExceptionTest.cpp\
+	  test/DirectionMapTest.cpp\
 
 CXX=g++
 CXXFLAGS=-Wall\
