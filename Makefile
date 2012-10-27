@@ -3,6 +3,7 @@ EXECUTABLE=bogey
 SOURCES=main.cpp\
 	callback/PlayerAnimationCallback.cpp\
 	callback/UpdateTimerCallback.cpp\
+	factory/FaceFactory.cpp\
 	handler/InputEventHandler.cpp\
 	state/PlayerState.cpp\
 	transform/PlayerTransform.cpp\
