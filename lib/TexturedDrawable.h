@@ -7,19 +7,14 @@
 class TexturedDrawable : public osg::Geometry
 {
 public:
-    void init();
+    typedef osg::Vec4Array Vertices;
+    typedef osg::DrawElementsUInt Element;
+    typedef osg::Vec2Array TextureCoords;
 
-protected:
-    typedef osg::ref_ptr<osg::Vec4Array> Vertices;
-    typedef osg::ref_ptr<osg::DrawElementsUInt> Element;
-    typedef std::list<Element> ElementsList;
-    typedef osg::ref_ptr<osg::Vec2Array> TextureCoords;
-
-protected:
-    virtual void createVertices(Vertices&) = 0;
-    virtual void createElements(ElementsList&) = 0;
-    virtual void createTextureCoords(TextureCoords&) = 0;
+    TexturedDrawable();
+    void setVertices(Vertices*);
+    void addElement(Element*);
+    void setTextureCoords(TextureCoords*, unsigned int = 0);
 };
 
 #endif
-

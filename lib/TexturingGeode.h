@@ -8,14 +8,10 @@
 class TexturingGeode : public osg::Geode
 {
 public:
-    void init();
+    typedef osg::Texture2D Texture;
 
-protected:
-    typedef osg::ref_ptr<osg::Texture2D> Texture;
-
-protected:
-    virtual void createTexture(Texture&) = 0;
-    void setImageFromFile(Texture&, const std::string&);
+    void setTexture(Texture*, unsigned int unit = 0);
+    void loadImageInTexture(Texture*, const std::string&);
 };
 
 #endif

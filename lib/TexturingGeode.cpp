@@ -3,16 +3,15 @@
 #include <osgDB/ReadFile>
 #include "exception/ErrorOpeningFileException.h"
 
-void TexturingGeode::init() {
-    Texture texture(new osg::Texture2D());
-    createTexture(texture);
-    getOrCreateStateSet()->setTextureAttributeAndModes(0, texture);
+void TexturingGeode::setTexture(Texture* texture, unsigned int unit)
+{
+    getOrCreateStateSet()->setTextureAttributeAndModes(unit, texture);
 }
 
-void TexturingGeode::setImageFromFile(Texture& texture, const std::string& file) {
-    osg::Image* face = osgDB::readImageFile(file);
-    if (!face) {
+void TexturingGeode::loadImageInTexture(Texture* texture, const std::string& file) {
+    osg::Image* image = osgDB::readImageFile(file);
+    if (!image) {
         throw ErrorOpeningFileException(file);
     }
-    texture->setImage(face);
+    texture->setImage(image);
 }

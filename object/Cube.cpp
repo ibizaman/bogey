@@ -15,15 +15,13 @@ Cube::Cube()
     for (Faces::iterator it = _faces.begin(); it != _faces.end(); ++it) {
         addDrawable(it->second);
     }
-    init();
-}
 
-void Cube::createTexture(Texture& texture)
-{
+    Texture* texture = new Texture();
     texture->setDataVariance(osg::Object::DYNAMIC);
     texture->setFilter(osg::Texture::MIN_FILTER, osg::Texture::NEAREST);
     texture->setFilter(osg::Texture::MAG_FILTER, osg::Texture::NEAREST);
     texture->setWrap( osg::Texture::WRAP_R, osg::Texture::REPEAT );
 
-    setImageFromFile(texture, "texture/wood.tga");
+    loadImageInTexture(texture, "texture/wood.tga");
+    setTexture(texture);
 }

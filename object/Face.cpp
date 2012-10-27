@@ -1,16 +1,12 @@
 #include "Face.h"
 
 Face::Face(Direction direction)
-    : _direction(direction)
-{
-    init();
-}
-
-void Face::createVertices(Vertices& vertices)
+    : TexturedDrawable()
 {
     float x = 1.0;
 
-    switch (_direction) {
+    Vertices* vertices = new Vertices();
+    switch (direction) {
         case FRONT:
             vertices->push_back(osg::Vec4(-x,-x, x, 1));
             vertices->push_back(osg::Vec4(-x, x, x, 1));
@@ -48,23 +44,19 @@ void Face::createVertices(Vertices& vertices)
             vertices->push_back(osg::Vec4( x,-x, x, 1));
             break;
     }
-}
 
-void Face::createElements(ElementsList& elements)
-{
-    Element surface(new osg::DrawElementsUInt(osg::PrimitiveSet::TRIANGLE_STRIP, 0));
+    setVertices(vertices);
+
+    Element* surface = new Element(osg::PrimitiveSet::TRIANGLE_STRIP, 0);
     surface->push_back(0);
     surface->push_back(1);
     surface->push_back(2);
     surface->push_back(3);
-    elements.push_back(surface);
-}
+    addElement(surface);
 
-void Face::createTextureCoords(TextureCoords& textureCoords)
-{
-    switch (_direction) {
+    TextureCoords* textureCoords = new TextureCoords();
+    switch (direction) {
         case FRONT:
-            textureCoords = new osg::Vec2Array;
             textureCoords->push_back(osg::Vec2(0.0f, 0.5f));
             textureCoords->push_back(osg::Vec2(0.0f, 1.0f));
             textureCoords->push_back(osg::Vec2(0.5f, 0.5f));
@@ -101,4 +93,6 @@ void Face::createTextureCoords(TextureCoords& textureCoords)
             textureCoords->push_back(osg::Vec2(1.0f, 1.0f));
             break;
     }
+
+    setTextureCoords(textureCoords);
 }

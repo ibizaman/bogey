@@ -9,14 +9,6 @@ public:
     enum Direction {TOP, BOTTOM, FRONT, BACK, LEFT, RIGHT};
 
     Face(Direction);
-
-protected:
-    void createVertices(Vertices&);
-    void createElements(ElementsList&);
-    void createTextureCoords(TextureCoords&);
-
-private:
-    Direction _direction;
 };
 
 #endif

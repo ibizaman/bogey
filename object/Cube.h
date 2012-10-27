@@ -10,9 +10,6 @@ class Cube : public TexturingGeode
 public:
     Cube();
 
-protected:
-    void createTexture(Texture&);
-
 private:
     typedef std::map< Face::Direction, osg::ref_ptr<Face> > Faces;
     Faces _faces;
