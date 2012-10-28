@@ -2,17 +2,19 @@
 #define CUBE_H
 
 #include "lib/TexturingGeode.h"
+#include "lib/DirectionMap.hxx"
+#include "factory/FaceFactory.h"
 #include <map>
 #include "object/Face.h"
 
 class Cube : public TexturingGeode
 {
 public:
-    Cube();
+    Cube(osg::ref_ptr<FaceFactory>);
 
 private:
-    typedef std::map< Face::Direction, osg::ref_ptr<Face> > Faces;
-    Faces _faces;
+    typedef DirectionMap<Face> FaceMap;
+    FaceMap _faces;
 };
 
 #endif

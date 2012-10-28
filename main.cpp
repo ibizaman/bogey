@@ -30,10 +30,14 @@ int main(int argc, char* argv[])
 
     (void) argc;
     (void) argv;
+
+    // Factories
+    // ---------
+    osg::ref_ptr<FaceFactory> faceFactory(new FaceFactory());
     
     // Graph
     // -----
-    osg::ref_ptr<Cube> cube(new Cube());
+    osg::ref_ptr<Cube> cube(new Cube(faceFactory));
 
     // Player
     // ------
