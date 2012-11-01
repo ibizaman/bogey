@@ -3,12 +3,10 @@ EXECUTABLE=bogey
 SOURCES=main.cpp\
 	callback/PlayerAnimationCallback.cpp\
 	callback/UpdateTimerCallback.cpp\
-	factory/FaceFactory.cpp\
+	factory/ShapeFactory.cpp\
 	handler/InputEventHandler.cpp\
 	state/PlayerState.cpp\
 	transform/PlayerTransform.cpp\
-	object/Cube.cpp\
-	object/Face.cpp\
 	lib/TexturedDrawable.cpp\
 	lib/TexturingGeode.cpp\
 	lib/TriState.cpp\
