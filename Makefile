@@ -6,6 +6,7 @@ SOURCES=main.cpp\
 	factory/ShapeFactory.cpp\
 	handler/InputEventHandler.cpp\
 	state/PlayerState.cpp\
+	transform/FaceTransform.cpp\
 	transform/PlayerTransform.cpp\
 	lib/TexturedDrawable.cpp\
 	lib/TexturingGeode.cpp\
