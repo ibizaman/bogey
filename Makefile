@@ -33,6 +33,7 @@ CXXFLAGS=-Wall\
 	 -Wcast-align
 CXXFLAGS_R=-O2 -s
 CXXFLAGS_D=-O0 -g
+CXXFLAGS_T=${CXXFLAGS_D}
 LIBS=osg osgDB osgViewer osgGA OpenThreads
 LIBS_T=gtest gmock
 DEFINE_D=DEBUG
