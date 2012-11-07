@@ -94,7 +94,7 @@ OBJECTS_DIR:=$(BUILD_DIR)objects/
 OBJECTS:=$(addprefix $(OBJECTS_DIR),$(SOURCES:.cpp=.o))
 
 # Ensures directory tree is created
-has_build_dir=$(wildcard $(BUILD_DIR))
+@has_build_dir=$(wildcard $(BUILD_DIR))
 ifeq ($(has_build_dir),)
     $(shell for d in $(sort $(dir $(OBJECTS))); do \
          [ -d $$d ] || mkdir -p $$d; \
