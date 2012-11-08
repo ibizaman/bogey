@@ -8,9 +8,11 @@
 #include <osgGA/NodeTrackerManipulator>
 #include "factory/ShapeFactory.h"
 #include "handler/InputEventHandler.h"
+#include "transform/CubeTransform.h"
 #include "state/PlayerState.h"
 #include "transform/PlayerTransform.h"
 #include "callback/PlayerAnimationCallback.h"
+#include "lib/TexturingGroup.h"
 
 #ifdef DEBUG
 #include <osgViewer/ViewerEventHandlers>
@@ -35,14 +37,18 @@ int main(int argc, char* argv[])
     // Factories
     // ---------
     osg::ref_ptr<ShapeFactory> shapeFactory(new ShapeFactory());
+    osg::ref_ptr<TexturingGroup> woodGroup(new TexturingGroup());
     
     // Graph
     // -----
-    ShapeFactory::Node playerCube(shapeFactory->getCube(osg::Vec3d(0,0,0), osg::Quat(), 1));
-    ShapeFactory::Node terrainCube(shapeFactory->getCube(osg::Vec3d(0,0,0), osg::Quat(), 1));
-    ShapeFactory::Node cube1(shapeFactory->getCube(osg::Vec3d(2,3,0), osg::Quat(), 1));
-    ShapeFactory::Node cube2(shapeFactory->getCube(osg::Vec3d(3,3,0), osg::Quat(), 1));
-    ShapeFactory::Node cube3(shapeFactory->getCube(osg::Vec3d(4,3,0), osg::Quat(osg::PI/2, osg::Vec3d(1,0,0)), 1));
+    osg::ref_ptr<CubeTransform> playerCube(shapeFactory->getCube(osg::Vec3d(0,0,0), osg::Quat(), 1));
+    osg::ref_ptr<CubeTransform> terrainCube(shapeFactory->getCube(osg::Vec3d(0,0,0), osg::Quat(), 1));
+    osg::ref_ptr<CubeTransform> cube1(shapeFactory->getCube(osg::Vec3d(2,3,0), osg::Quat(), 1));
+    //osg::ref_ptr<CubeTransform> cube2(shapeFactory->getCube(osg::Vec3d(3,3,0), osg::Quat(), 1));
+    osg::ref_ptr<CubeTransform> cube3(shapeFactory->getCube(osg::Vec3d(4,3,0), osg::Quat(osg::PI/2, osg::Vec3d(1,0,0)), 1));
+    //cube1->bindNeighbour(cube2);
+    //cube2->bindNeighbour(cube3);
+    cube1->bindNeighbour(cube3);
 
     // Player
     // ------
@@ -59,11 +65,11 @@ int main(int argc, char* argv[])
     terrainTransform->setPosition(osg::Vec3d(0,0,-2));
     terrainTransform->setScale(osg::Vec3d(1000,1000,1));
 
-    osg::ref_ptr<osg::Group> root(new osg::Group());
+    osg::ref_ptr<TexturingGroup> root(new TexturingGroup("texture/wood.tga"));
     root->addChild(terrainTransform);
     root->addChild(playerTransform);
     root->addChild(cube1);
-    root->addChild(cube2);
+    //root->addChild(cube2);
     root->addChild(cube3);
 
     // Fog & Lightning
