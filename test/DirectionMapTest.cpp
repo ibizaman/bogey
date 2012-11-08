@@ -67,3 +67,23 @@ TEST_F(DirectionMapTest, testOpposite)
     map.set(Direction(0,0,1), new DummyClass(1));
     EXPECT_EQ( 1, map.get(Direction(0,0,-1))->getI() );
 }
+
+TEST_F(DirectionMapTest, testLoop)
+{
+    int i = 0;
+    for (Map::iterator it = _map.begin(); it != _map.end(); ++it)
+    {
+        ++i;
+    }
+    EXPECT_EQ( 6, i );
+}
+
+TEST_F(DirectionMapTest, testCopyPointers)
+{
+    Map copy(_map);
+    copy.get(Direction(1,0,0))->setI(10);
+    for (Map::iterator it = _map.begin(); it != _map.end(); ++it)
+    {
+        EXPECT_EQ( &*it->second, &*copy.get(it->first) );
+    }
+}

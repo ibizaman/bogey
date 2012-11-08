@@ -6,6 +6,7 @@ SOURCES=main.cpp\
 	factory/ShapeFactory.cpp\
 	handler/InputEventHandler.cpp\
 	state/PlayerState.cpp\
+	transform/ShapeTransform.cpp\
 	transform/FaceTransform.cpp\
 	transform/PlayerTransform.cpp\
 	lib/TexturedDrawable.cpp\
@@ -15,6 +16,7 @@ SOURCES=main.cpp\
 
 SOURCES_T=test/BaseExceptionTest.cpp\
 	  test/DirectionMapTest.cpp\
+	  test/ShapeTransformTest.cpp\
 
 CXX=g++
 CXXFLAGS=-Wall\

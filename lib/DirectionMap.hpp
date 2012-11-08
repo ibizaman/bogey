@@ -2,23 +2,26 @@
 
 template<typename T>
 DirectionMap<T>::DirectionMap()
-    : _cachedMinDistance(1),
+    : osg::Referenced(),
+      _cachedMinDistance(1),
       _inferiorLimit(1e-1)
 {
 }
 
 template<typename T>
 DirectionMap<T>::DirectionMap(double inferiorLimit)
-    : _cachedMinDistance(1),
+    : osg::Referenced(),
+      _cachedMinDistance(1),
       _inferiorLimit(inferiorLimit)
 {
 }
 
 template<typename T>
-DirectionMap<T>::DirectionMap(const DirectionMap& map)
-    : _list(map._list),
-      _cachedMinDistance(map._cachedMinDistance),
-      _inferiorLimit(map._inferiorLimit)
+DirectionMap<T>::DirectionMap(const DirectionMap& other)
+    : osg::Referenced(other),
+      _list(other.begin(), other.end()),
+      _cachedMinDistance(other._cachedMinDistance),
+      _inferiorLimit(other._inferiorLimit)
 {
 }
 
@@ -44,8 +47,7 @@ void DirectionMap<T>::set(Direction direction, Element value)
         }
     }
 
-    Pair pair(direction, value);
-    _list.push_back(pair);
+    _list.push_back(Pair(direction, value));
 }
 
 template<typename T>
@@ -92,6 +94,18 @@ typename DirectionMap<T>::iterator DirectionMap<T>::begin()
 
 template<typename T>
 typename DirectionMap<T>::iterator DirectionMap<T>::end()
+{
+    return _list.end();
+}
+
+template<typename T>
+typename DirectionMap<T>::const_iterator DirectionMap<T>::begin() const
+{
+    return _list.begin();
+}
+
+template<typename T>
+typename DirectionMap<T>::const_iterator DirectionMap<T>::end() const
 {
     return _list.end();
 }

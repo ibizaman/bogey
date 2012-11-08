@@ -1,12 +1,13 @@
 #ifndef DIRECTIONMAP_HXX
 #define DIRECTIONMAP_HXX
 
+#include <osg/Referenced>
 #include <osg/observer_ptr>
 #include <list>
 #include <osg/vec3d>
 
 template<typename T>
-class DirectionMap
+class DirectionMap : public osg::Referenced
 {
 public:
     typedef osg::Vec3d Direction;
@@ -14,6 +15,7 @@ public:
     typedef std::pair<Direction, Element> Pair;
     typedef std::list<Pair> PairList;
     typedef typename PairList::iterator iterator;
+    typedef typename PairList::const_iterator const_iterator;
 
     DirectionMap();
     DirectionMap(double);
@@ -25,6 +27,8 @@ public:
     int count(const Direction&);
     iterator begin();
     iterator end();
+    const_iterator begin() const;
+    const_iterator end() const;
 
 private:
     PairList _list;
