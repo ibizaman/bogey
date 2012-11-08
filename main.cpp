@@ -8,7 +8,7 @@
 #include <osgGA/NodeTrackerManipulator>
 #include "factory/ShapeFactory.h"
 #include "handler/InputEventHandler.h"
-#include "transform/CubeTransform.h"
+#include "transform/ShapeTransform.h"
 #include "state/PlayerState.h"
 #include "transform/PlayerTransform.h"
 #include "callback/PlayerAnimationCallback.h"
@@ -41,11 +41,11 @@ int main(int argc, char* argv[])
     
     // Graph
     // -----
-    osg::ref_ptr<CubeTransform> playerCube(shapeFactory->getCube(osg::Vec3d(0,0,0), osg::Quat(), 1));
-    osg::ref_ptr<CubeTransform> terrainCube(shapeFactory->getCube(osg::Vec3d(0,0,0), osg::Quat(), 1));
-    osg::ref_ptr<CubeTransform> cube1(shapeFactory->getCube(osg::Vec3d(2,3,0), osg::Quat(), 1));
-    //osg::ref_ptr<CubeTransform> cube2(shapeFactory->getCube(osg::Vec3d(3,3,0), osg::Quat(), 1));
-    osg::ref_ptr<CubeTransform> cube3(shapeFactory->getCube(osg::Vec3d(4,3,0), osg::Quat(osg::PI/2, osg::Vec3d(1,0,0)), 1));
+    ShapeFactory::Cube playerCube(shapeFactory->getCube(osg::Vec3d(0,0,0), osg::Quat(), 1));
+    ShapeFactory::Cube terrainCube(shapeFactory->getCube(osg::Vec3d(0,0,0), osg::Quat(), 1));
+    ShapeFactory::Cube cube1(shapeFactory->getCube(osg::Vec3d(2,3,0), osg::Quat(), 1));
+    //ShapeFactory::Cube cube2(shapeFactory->getCube(osg::Vec3d(3,3,0), osg::Quat(), 1));
+    ShapeFactory::Cube cube3(shapeFactory->getCube(osg::Vec3d(4,3,0), osg::Quat(osg::PI/2, osg::Vec3d(1,0,0)), 1));
     //cube1->bindNeighbour(cube2);
     //cube2->bindNeighbour(cube3);
     cube1->bindNeighbour(cube3);

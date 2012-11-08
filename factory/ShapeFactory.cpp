@@ -1,5 +1,5 @@
 #include "ShapeFactory.h"
-#include <osg/Geode>
+#include "transform/FaceTransform.h"
 
 ShapeFactory::ShapeFactory()
 {
@@ -39,44 +39,38 @@ ShapeFactory::Drawable ShapeFactory::getSquare(const osg::Vec2d& pos, const osg:
     return square;
 }
 
-ShapeFactory::PAT ShapeFactory::getCube(const osg::Vec3d& position, const osg::Quat& attitude, double size)
+ShapeFactory::Cube ShapeFactory::getCube(const osg::Vec3d& position, const osg::Quat& attitude, double size)
 {
-    PAT cube(new osg::PositionAttitudeTransform());
-    cube->setPosition(position);
-    cube->setAttitude(attitude);
-
     const double ratio = 1.0/6.0;
+    osg::ref_ptr<ShapeTransform::Faces> directionMap(new ShapeTransform::Faces());
 
     int textureNum = 0;
     for (Directions::iterator direction = _cubeDirections.begin(); direction != _cubeDirections.end(); ++direction) {
 
         osg::ref_ptr<TexturedDrawable> drawable(getSquare(osg::Vec2d(textureNum*ratio, 0), osg::Vec2d(ratio, 1), size));
 
-        // should be neighbour geode
-        osg::ref_ptr<osg::Geode> geode(new osg::Geode());
-        geode->addDrawable(drawable);
+        ShapeTransform::Face face(new FaceTransform(drawable));
+        translate(face.get(), *direction, size/2);
 
-        PAT face(getTranslatedPAT(*direction, size/2));
-        face->addChild(geode);
-
-        cube->addChild(face);
+        directionMap->set(*direction, face);
 
         ++textureNum;
     }
 
+    Cube cube(new ShapeTransform(directionMap));
+    cube->setPosition(position);
+    cube->setAttitude(attitude);
+
     return cube;
 }
 
-ShapeFactory::PAT ShapeFactory::getTranslatedPAT(osg::Vec3d direction, double shift)
+void ShapeFactory::translate(osg::PositionAttitudeTransform* face, osg::Vec3d direction, double shift)
 {
     direction.normalize();
 
-    PAT pat(new osg::PositionAttitudeTransform());
-    pat->setPosition(direction*shift);
+    face->setPosition(direction*shift);
 
     osg::Quat attitude;
     attitude.makeRotate(direction, osg::Vec3d(0,0,1));
-    pat->setAttitude(attitude);
-
-    return pat;
+    face->setAttitude(attitude);
 }
