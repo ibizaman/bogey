@@ -10,7 +10,7 @@ SOURCES=main.cpp\
 	transform/FaceTransform.cpp\
 	transform/PlayerTransform.cpp\
 	lib/TexturedDrawable.cpp\
-	lib/TexturingGeode.cpp\
+	lib/TexturingGroup.cpp\
 	lib/TriState.cpp\
 	exception/BaseException.cpp\
 
