@@ -22,6 +22,8 @@
 #include <gmock/gmock.h>
 #endif
 
+osg::ref_ptr<osg::Geometry> createAxis(const osg::Vec3&, const osg::Vec4&);
+
 int main(int argc, char* argv[])
 {
 #if defined TEST
@@ -37,7 +39,6 @@ int main(int argc, char* argv[])
     // Factories
     // ---------
     osg::ref_ptr<ShapeFactory> shapeFactory(new ShapeFactory());
-    osg::ref_ptr<TexturingGroup> woodGroup(new TexturingGroup());
     
     // Graph
     // -----
@@ -60,17 +61,28 @@ int main(int argc, char* argv[])
 
     // Terrain
     // -------
+    osg::ref_ptr<osg::Group> root(new osg::Group);
+
     osg::ref_ptr<osg::PositionAttitudeTransform> terrainTransform(new osg::PositionAttitudeTransform());
     terrainTransform->addChild(terrainCube);
     terrainTransform->setPosition(osg::Vec3d(0,0,-2));
     terrainTransform->setScale(osg::Vec3d(1000,1000,1));
 
-    osg::ref_ptr<TexturingGroup> root(new TexturingGroup("texture/wood.tga"));
-    root->addChild(terrainTransform);
-    root->addChild(playerTransform);
-    root->addChild(cube1);
-    //root->addChild(cube2);
-    root->addChild(cube3);
+    osg::ref_ptr<TexturingGroup> woodGroup(new TexturingGroup("texture/wood.tga"));
+    woodGroup->addChild(terrainTransform);
+    woodGroup->addChild(playerTransform);
+    woodGroup->addChild(cube1);
+    //woodGroup->addChild(cube2);
+    woodGroup->addChild(cube3);
+    root->addChild(woodGroup);
+
+    // Axis
+    // ----
+    osg::ref_ptr<osg::Geode> axis(new osg::Geode());
+    axis->addDrawable(createAxis(osg::Vec3(1,0,0), osg::Vec4(1,0,0,1)));
+    axis->addDrawable(createAxis(osg::Vec3(0,1,0), osg::Vec4(0,1,0,1)));
+    axis->addDrawable(createAxis(osg::Vec3(0,0,1), osg::Vec4(0,0,1,1)));
+    root->addChild(axis);
 
     // Fog & Lightning
     // ---------------
@@ -126,3 +138,20 @@ int main(int argc, char* argv[])
 #endif
 }
 
+osg::ref_ptr<osg::Geometry> createAxis(const osg::Vec3& direction, const osg::Vec4& color)
+{
+    osg::ref_ptr<osg::Geometry> axis(new osg::Geometry);
+    osg::ref_ptr<osg::Vec3Array> vertices(new osg::Vec3Array);
+    vertices->push_back(osg::Vec3(0,0,0));
+    vertices->push_back(direction);
+    axis->setVertexArray(vertices);
+
+    osg::ref_ptr<osg::Vec4Array> colors(new osg::Vec4Array);
+    colors->push_back(color);
+    axis->setColorArray(colors);
+    axis->setColorBinding(osg::Geometry::BIND_OVERALL);
+
+    axis->addPrimitiveSet(new osg::DrawArrays(osg::PrimitiveSet::LINES,0,vertices->size()));
+
+    return axis;
+}
