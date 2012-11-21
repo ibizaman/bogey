@@ -11,6 +11,8 @@ SOURCES=main.cpp\
 	exception/BaseException.cpp\
 	shapes/Rectangle.cpp\
 	shapes/Circle.cpp\
+	lib/Perlin3D.cpp\
+	shapes/Chunk.cpp\
 
 CXX=g++
 CXXFLAGS=-Wall\

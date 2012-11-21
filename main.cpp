@@ -12,6 +12,8 @@
 #include "lib/Cube.h"
 #include "shapes/Rectangle.h"
 #include "shapes/Circle.h"
+#include "lib/Perlin3D.h"
+#include "shapes/Chunk.h"
 
 #ifdef DEBUG
 #include <osgViewer/ViewerEventHandlers>
@@ -21,6 +23,7 @@ int main(int argc, char* argv[])
 {
     (void) argc;
     (void) argv;
+    srand(time(NULL));
     
     // Graph
     // -----
@@ -38,11 +41,14 @@ int main(int argc, char* argv[])
     // -------
     // osg::ref_ptr<Rectangle> rectangle(new Rectangle("wood" , 5 , 5 , osg::Vec3d(0 , 0 , -2)));
     osg::ref_ptr<Circle> circle(new Circle("sand" , 15 , osg::Vec3d(0,0,-20)));
+    Perlin3D perlin1(123456789 , 10000000 , 0.5);
     osg::ref_ptr<osg::Group> root(new osg::Group());
+    osg::ref_ptr<Chunk> chunk1(new Chunk("plank" , osg::Vec3d(0 , 0 , 0) , perlin1));
     root->addChild(playerTransform);
     // root->addChild(rectangle);
     root->addChild(circle);
 
+    root->addChild(chunk1);
     // Fog & Lightning
     // ---------------
     osg::ref_ptr<osg::StateSet> ss = root->getOrCreateStateSet();
