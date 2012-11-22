@@ -1,11 +1,12 @@
 #include "ShapeFactory.h"
 #include "transform/FaceTransform.h"
+#include <cmath>
 
 ShapeFactory::ShapeFactory()
 {
     _cubeDirections.push_back(osg::Vec3d( 1, 0, 0));
-    _cubeDirections.push_back(osg::Vec3d(-1, 0, 0));
     _cubeDirections.push_back(osg::Vec3d( 0, 1, 0));
+    _cubeDirections.push_back(osg::Vec3d(-1, 0, 0));
     _cubeDirections.push_back(osg::Vec3d( 0,-1, 0));
     _cubeDirections.push_back(osg::Vec3d( 0, 0, 1));
     _cubeDirections.push_back(osg::Vec3d( 0, 0,-1));
@@ -49,7 +50,7 @@ ShapeFactory::Cube ShapeFactory::getCube(const osg::Vec3d& position, const osg::
 
         osg::ref_ptr<TexturedDrawable> drawable(getSquare(osg::Vec2d(textureNum*ratio, 0), osg::Vec2d(ratio, 1), size));
 
-        ShapeTransform::Face face(new FaceTransform(drawable));
+        osg::ref_ptr<FaceTransform> face(new FaceTransform(drawable));
         translate(face.get(), *direction, size/2);
 
         directionMap->set(*direction, face);
@@ -68,9 +69,14 @@ void ShapeFactory::translate(osg::PositionAttitudeTransform* face, osg::Vec3d di
 {
     direction.normalize();
 
-    face->setPosition(direction*shift);
+    double zAngle = atan2(direction.y(), direction.x());
+    osg::Quat zRot(zAngle, osg::Vec3d(0,0,1));
 
-    osg::Quat attitude;
-    attitude.makeRotate(direction, osg::Vec3d(0,0,1));
-    face->setAttitude(attitude);
+    osg::Vec3d yAxis = zRot * osg::Vec3d(0,1,0);
+    double zLength = (direction - osg::Vec3d(0,0,direction.z())).length();
+    double yAngle = - atan2(direction.z(), zLength) + osg::PI/2;
+    osg::Quat yRot(yAngle, yAxis);
+
+    face->setAttitude(zRot * yRot);
+    face->setPosition(direction*shift);
 }
