@@ -23,6 +23,10 @@ void TexturingGroup::setTexture(const std::string& file, unsigned int unit)
 {
     Texture texture(new osg::Texture2D());
     loadImageInTexture(texture, file);
+    texture->setDataVariance(osg::Object::DYNAMIC);
+    texture->setFilter(osg::Texture::MIN_FILTER, osg::Texture::NEAREST);
+    texture->setFilter(osg::Texture::MAG_FILTER, osg::Texture::NEAREST);
+    texture->setWrap(osg::Texture::WRAP_R, osg::Texture::REPEAT);
     setTexture(texture, unit);
 }
 
