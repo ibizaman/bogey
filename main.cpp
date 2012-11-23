@@ -1,33 +1,59 @@
 #include <osg/Fog>
 #include <osg/Group>
 #include <osg/Geode>
+#include <osg/Node>
 #include <osg/PolygonMode>
 #include <osg/PositionAttitudeTransform>
 #include <osgViewer/Viewer>
 #include <osgGA/NodeTrackerManipulator>
+#include "factory/ShapeFactory.h"
 #include "handler/InputEventHandler.h"
+#include "transform/ShapeTransform.h"
 #include "state/PlayerState.h"
 #include "transform/PlayerTransform.h"
 #include "callback/PlayerAnimationCallback.h"
-#include "lib/Cube.h"
+#include "lib/TexturingGroup.h"
 
 #ifdef DEBUG
 #include <osgViewer/ViewerEventHandlers>
 #endif
 
+#if defined TEST
+#include <gmock/gmock.h>
+#endif
+
 int main(int argc, char* argv[])
 {
+#if defined TEST
+
+    ::testing::InitGoogleMock(&argc, argv);
+    return RUN_ALL_TESTS();
+
+#else
+
     (void) argc;
     (void) argv;
+
+    // Factories
+    // ---------
+    osg::ref_ptr<ShapeFactory> shapeFactory(new ShapeFactory());
+    osg::ref_ptr<TexturingGroup> woodGroup(new TexturingGroup());
     
     // Graph
     // -----
-    osg::ref_ptr<Cube> cube(new Cube());
+    ShapeFactory::Cube playerCube(shapeFactory->getCube(osg::Vec3d(0,0,0), osg::Quat(), 1));
+    ShapeFactory::Cube terrainCube(shapeFactory->getCube(osg::Vec3d(0,0,0), osg::Quat(), 1));
+    ShapeFactory::Cube cube1(shapeFactory->getCube(osg::Vec3d(2,3,0), osg::Quat(), 1));
+    //ShapeFactory::Cube cube2(shapeFactory->getCube(osg::Vec3d(3,3,0), osg::Quat(), 1));
+    ShapeFactory::Cube cube3(shapeFactory->getCube(osg::Vec3d(4,3,0), osg::Quat(osg::PI/2, osg::Vec3d(1,0,0)), 1));
+    //cube1->bindNeighbour(cube2);
+    //cube2->bindNeighbour(cube3);
+    cube1->bindNeighbour(cube3);
 
     // Player
     // ------
     osg::ref_ptr<PlayerTransform> playerTransform(new PlayerTransform());
-    playerTransform->addChild(cube);
+    playerTransform->addChild(playerCube);
     playerTransform->setPosition(osg::Vec3d(-10,0,0));
     osg::ref_ptr<PlayerState> playerState(new PlayerState());
     playerTransform->addUpdateCallback(new PlayerAnimationCallback(playerState));
@@ -35,14 +61,16 @@ int main(int argc, char* argv[])
     // Terrain
     // -------
     osg::ref_ptr<osg::PositionAttitudeTransform> terrainTransform(new osg::PositionAttitudeTransform());
-    terrainTransform->addChild(cube);
+    terrainTransform->addChild(terrainCube);
     terrainTransform->setPosition(osg::Vec3d(0,0,-2));
     terrainTransform->setScale(osg::Vec3d(1000,1000,1));
 
-    osg::ref_ptr<osg::Group> root(new osg::Group());
+    osg::ref_ptr<TexturingGroup> root(new TexturingGroup("texture/wood.tga"));
     root->addChild(terrainTransform);
     root->addChild(playerTransform);
-    root->addChild(cube);
+    root->addChild(cube1);
+    //root->addChild(cube2);
+    root->addChild(cube3);
 
     // Fog & Lightning
     // ---------------
@@ -64,7 +92,7 @@ int main(int argc, char* argv[])
 
     // Camera & manipulator
     osg::ref_ptr<osgGA::NodeTrackerManipulator> manipulator(new osgGA::NodeTrackerManipulator());
-    manipulator->setTrackNode(cube);
+    manipulator->setTrackNode(playerCube);
     manipulator->setHomePosition(
             osg::Vec3d(-10.0, 0.0, 10.0),
             osg::Vec3d(0.0, 0.0, 7.0),
@@ -95,5 +123,6 @@ int main(int argc, char* argv[])
     viewer->setSceneData(root);
 
     viewer->run();
+#endif
 }
 

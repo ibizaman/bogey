@@ -3,12 +3,20 @@ EXECUTABLE=bogey
 SOURCES=main.cpp\
 	callback/PlayerAnimationCallback.cpp\
 	callback/UpdateTimerCallback.cpp\
+	factory/ShapeFactory.cpp\
 	handler/InputEventHandler.cpp\
 	state/PlayerState.cpp\
+	transform/ShapeTransform.cpp\
+	transform/FaceTransform.cpp\
 	transform/PlayerTransform.cpp\
-	lib/Cube.cpp\
+	lib/TexturedDrawable.cpp\
+	lib/TexturingGroup.cpp\
 	lib/TriState.cpp\
 	exception/BaseException.cpp\
+
+SOURCES_T=test/BaseExceptionTest.cpp\
+	  test/DirectionMapTest.cpp\
+	  test/ShapeTransformTest.cpp\
 
 CXX=g++
 CXXFLAGS=-Wall\
@@ -26,7 +34,9 @@ CXXFLAGS=-Wall\
 CXXFLAGS_R=-O2 -s
 CXXFLAGS_D=-O0 -g
 LIBS=osg osgDB osgViewer osgGA OpenThreads
+LIBS_T=gtest gmock
 DEFINE_D=DEBUG
+DEFINE_T=TEST
 INCPATH=.
 
 #######################
@@ -39,20 +49,10 @@ ifndef mode
 endif 
 ifneq ($(mode), release)
 ifneq ($(mode), debug)
-    $(error mode must be release or debug)
+ifneq ($(mode), test)
+    $(error mode must be release, debug or test)
 endif
 endif
-
-BUILD_DIR:=build/$(mode)/
-OBJECTS_DIR:=$(BUILD_DIR)objects/
-OBJECTS:=$(addprefix $(OBJECTS_DIR),$(SOURCES:.cpp=.o))
-
-# Ensures directory tree is created
-has_build_dir=$(wildcard $(BUILD_DIR))
-ifeq ($(has_build_dir),)
-    $(shell for d in $(sort $(dir $(OBJECTS))); do \
-         [ -d $$d ] || mkdir -p $$d; \
-    done)
 endif
 
 LDFLAGS:=$(addprefix -l,$(LIBS)) $(addprefix -framework ,$(FRAMEWORKS))
@@ -65,7 +65,13 @@ endif
 ifeq ($(mode), release)
     m=R
 endif
+ifeq ($(mode), test)
+    m=T
+endif
 
+ifdef SOURCES_$m
+SOURCES:=$(SOURCES_$m) $(SOURCES)
+endif
 ifdef CXXFLAGS_$m
 CXXFLAGS:=$(CXXFLAGS_$m) $(CXXFLAGS)
 endif
@@ -82,11 +88,23 @@ ifdef DEFINE_$m
 DEFINE:=$(DEFINE) $(addprefix -D,$(DEFINE_$m))
 endif
 
+BUILD_DIR:=build/$(mode)/
+OBJECTS_DIR:=$(BUILD_DIR)objects/
+OBJECTS:=$(addprefix $(OBJECTS_DIR),$(SOURCES:.cpp=.o))
+
+# Ensures directory tree is created
+has_build_dir=$(wildcard $(BUILD_DIR))
+ifeq ($(has_build_dir),)
+    $(shell for d in $(sort $(dir $(OBJECTS))); do \
+         [ -d $$d ] || mkdir -p $$d; \
+    done)
+endif
+
 #####################
 # COMPILATION RULES #
 #####################
 
-.PHONY: release debug clean
+.PHONY: compile clean
 
 # COMPILATION RULES
 compile: $(OBJECTS)
