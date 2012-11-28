@@ -1,7 +1,27 @@
 #include "ShapeTransform.h"
 
+ShapeTransform::ShapeTransform()
+    : osg::PositionAttitudeTransform(),
+      _transparent(false)
+{
+}
+
 ShapeTransform::ShapeTransform(osg::ref_ptr<Faces> faces)
-    : _transparent(false)
+    : osg::PositionAttitudeTransform(),
+      _transparent(false)
+{
+    init(faces);
+}
+
+ShapeTransform::ShapeTransform(const ShapeTransform& other)
+    : osg::PositionAttitudeTransform(other),
+      _transparent(other._transparent),
+      _directionMap(other._directionMap),
+      _box(other._box)
+{
+}
+
+void ShapeTransform::init(osg::ref_ptr<Faces> faces)
 {
     for (Faces::iterator face = faces->begin(); face != faces->end(); ++face) {
         _directionMap.set(face->first, new Tuple(face->second));
@@ -95,6 +115,16 @@ ShapeTransform::Faces::Direction ShapeTransform::getDirection(Neighbour neighbou
 ShapeTransform::Neighbour ShapeTransform::getNeighbour(const Faces::Direction& direction)
 {
     return _directionMap.get(direction)->neighbour;
+}
+
+void ShapeTransform::setBoundingBox(const osg::BoundingBox& box)
+{
+    _box = box;
+}
+
+osg::BoundingBox ShapeTransform::getBoundingBox() const
+{
+    return _box;
 }
 
 ShapeTransform::Tuple::Tuple(Face face)

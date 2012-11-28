@@ -13,7 +13,7 @@ BaseException::~BaseException() throw()
 const char* BaseException::what() const throw()
 {
     std::stringstream stream;
-    stream << "ERROR [" << errornum() << "] " << message();
+    stream << "ERROR " << message();
     if (!_elem.empty()) {
         stream << " (" << _elem << ")";
     }

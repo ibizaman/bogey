@@ -5,6 +5,7 @@
 #include <osg/Node>
 #include <osg/ref_ptr>
 #include <osg/Referenced>
+#include <osg/BoundingBox>
 #include "lib/DirectionMap.hxx"
 
 class ShapeTransform : public osg::PositionAttitudeTransform
@@ -14,13 +15,20 @@ public:
     typedef osg::observer_ptr<ShapeTransform> Neighbour;
     typedef DirectionMap<osg::PositionAttitudeTransform> Faces;
 
+    ShapeTransform();
     ShapeTransform(osg::ref_ptr<Faces>);
+    ShapeTransform(const ShapeTransform&);
     void bindNeighbour(Neighbour);
     void unbindNeighbour(const Faces::Direction&);
     void setTransparence(bool);
     bool isTransparent() const;
     bool isFaceHidden(const Faces::Direction&);
     Neighbour getNeighbour(const Faces::Direction&);
+    void setBoundingBox(const osg::BoundingBox&);
+    osg::BoundingBox getBoundingBox() const;
+
+protected:
+    void init(osg::ref_ptr<Faces>);
 
 private:
     bool hideFace(const Faces::Direction&);
@@ -33,9 +41,10 @@ private:
         Neighbour neighbour;
     };
 
+    bool _transparent;
     typedef DirectionMap<Tuple> TupleMap;
     TupleMap _directionMap;
-    bool _transparent;
+    osg::BoundingBox _box;
 };
 
 #endif

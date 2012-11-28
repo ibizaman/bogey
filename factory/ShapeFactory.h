@@ -1,7 +1,8 @@
 #ifndef SHAPEFACTORY_H
 #define SHAPEFACTORY_H
 
-#include <osg/Referenced>
+#include "lib/Factory.hxx"
+#include "transform/ShapeTransform.h"
 #include <osg/Node>
 #include <osg/PositionAttitudeTransform>
 #include <osg/Vec2d>
@@ -9,25 +10,18 @@
 #include <osg/Quat>
 #include <list>
 #include "lib/TexturedDrawable.h"
-#include "transform/ShapeTransform.h"
 
-class ShapeFactory : public osg::Referenced
+class ShapeFactory : public Factory<ShapeTransform>
 {
 public:
-    typedef osg::ref_ptr<ShapeTransform> Cube;
+    typedef Factory<ShapeTransform>::Element Element;
+    typedef Factory<ShapeTransform>::const_iterator const_iterator;
 
-    ShapeFactory();
-    Cube getCube(const osg::Vec3d&, const osg::Quat&, double size = 1);
+    ShapeFactory(bool = false);
 
-protected:
-
-private:
     typedef osg::ref_ptr<TexturedDrawable> Drawable;
     Drawable getSquare(const osg::Vec2d&, const osg::Vec2d&, double length = 1);
     void translate(osg::PositionAttitudeTransform*, osg::Vec3d, double);
-
-    typedef std::list<osg::Vec3d> Directions;
-    Directions _cubeDirections;
 };
 
 #endif

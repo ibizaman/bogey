@@ -6,13 +6,16 @@
 #include <osg/PositionAttitudeTransform>
 #include <osgViewer/Viewer>
 #include <osgGA/NodeTrackerManipulator>
+#include "callback/PlayerAnimationCallback.h"
 #include "factory/ShapeFactory.h"
 #include "handler/InputEventHandler.h"
-#include "transform/ShapeTransform.h"
 #include "state/PlayerState.h"
+#include "transform/ShapeTransform.h"
 #include "transform/PlayerTransform.h"
-#include "callback/PlayerAnimationCallback.h"
+#include "object/Cube.h"
+#include "shape/Chunk.h"
 #include "lib/TexturingGroup.h"
+#include "lib/Perlin3D.h"
 
 #ifdef DEBUG
 #include <osgViewer/ViewerEventHandlers>
@@ -35,18 +38,24 @@ int main(int argc, char* argv[])
 
     (void) argc;
     (void) argv;
+    srand(time(NULL));
 
     // Factories
     // ---------
     osg::ref_ptr<ShapeFactory> shapeFactory(new ShapeFactory());
+    shapeFactory->insert("cube", new Cube(1, shapeFactory));
     
     // Graph
     // -----
-    ShapeFactory::Cube playerCube(shapeFactory->getCube(osg::Vec3d(0,0,0), osg::Quat(), 1));
-    ShapeFactory::Cube terrainCube(shapeFactory->getCube(osg::Vec3d(0,0,0), osg::Quat(), 1));
-    ShapeFactory::Cube cube1(shapeFactory->getCube(osg::Vec3d(2,3,0), osg::Quat(), 1));
-    //ShapeFactory::Cube cube2(shapeFactory->getCube(osg::Vec3d(3,3,0), osg::Quat(), 1));
-    ShapeFactory::Cube cube3(shapeFactory->getCube(osg::Vec3d(4,3,0), osg::Quat(osg::PI/2, osg::Vec3d(1,0,0)), 1));
+    ShapeFactory::Element playerCube(shapeFactory->get("cube"));
+    //ShapeFactory::Element terrainCube(shapeFactory->get("cube"));
+    ShapeFactory::Element cube1(shapeFactory->get("cube"));
+    cube1->setPosition(osg::Vec3d(2,3,0));
+    //ShapeFactory::Element cube2(shapeFactory->get("cube"));
+    //cube2->setPosition(osg::Vec3d(3,3,0));
+    ShapeFactory::Element cube3(shapeFactory->get("cube"));
+    cube3->setPosition(osg::Vec3d(4,3,0));
+    cube3->setAttitude(osg::Quat(osg::PI/2, osg::Vec3d(1,0,0)));
     //cube1->bindNeighbour(cube2);
     //cube2->bindNeighbour(cube3);
     cube1->bindNeighbour(cube3);
@@ -62,19 +71,32 @@ int main(int argc, char* argv[])
     // Terrain
     // -------
     osg::ref_ptr<osg::Group> root(new osg::Group);
-
-    osg::ref_ptr<osg::PositionAttitudeTransform> terrainTransform(new osg::PositionAttitudeTransform());
-    terrainTransform->addChild(terrainCube);
-    terrainTransform->setPosition(osg::Vec3d(0,0,-2));
-    terrainTransform->setScale(osg::Vec3d(1000,1000,1));
-
+    osg::ref_ptr<TexturingGroup> cobbleGroup(new TexturingGroup("texture/cobblestone.tga"));
     osg::ref_ptr<TexturingGroup> woodGroup(new TexturingGroup("texture/wood.tga"));
-    woodGroup->addChild(terrainTransform);
-    woodGroup->addChild(playerTransform);
+    osg::ref_ptr<TexturingGroup> sandGroup(new TexturingGroup("texture/sand.tga"));
+    osg::ref_ptr<TexturingGroup> plankGroup(new TexturingGroup("texture/plank.tga"));
+    osg::ref_ptr<TexturingGroup> dirtGroup(new TexturingGroup("texture/dirt.tga"));
+    root->addChild(cobbleGroup);
+    root->addChild(woodGroup);
+    root->addChild(sandGroup);
+    root->addChild(plankGroup);
+    root->addChild(dirtGroup);
+
+    cobbleGroup->addChild(playerTransform);
+
+    //osg::ref_ptr<osg::PositionAttitudeTransform> terrainTransform(new osg::PositionAttitudeTransform());
+    //terrainTransform->addChild(terrainCube);
+    //terrainTransform->setPosition(osg::Vec3d(0,0,-2));
+    //terrainTransform->setScale(osg::Vec3d(1000,1000,1));
+    //cobbleGroup->addChild(terrainTransform);
+
     woodGroup->addChild(cube1);
     //woodGroup->addChild(cube2);
     woodGroup->addChild(cube3);
-    root->addChild(woodGroup);
+
+    Perlin3D perlin1(123456789 , 10000000 , 0.5);
+    osg::ref_ptr<Chunk> chunk1(new Chunk(shapeFactory->get("cube"), perlin1));
+    plankGroup->addChild(chunk1);
 
     // Axis
     // ----

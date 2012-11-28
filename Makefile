@@ -13,9 +13,13 @@ SOURCES=main.cpp\
 	lib/TexturingGroup.cpp\
 	lib/TriState.cpp\
 	exception/BaseException.cpp\
+	object/Cube.cpp\
+	shape/Chunk.cpp\
+	lib/Perlin3D.cpp\
 
 SOURCES_T=test/BaseExceptionTest.cpp\
 	  test/DirectionMapTest.cpp\
+	  test/FactoryTest.cpp\
 	  test/ShapeTransformTest.cpp\
 
 CXX=g++

@@ -15,7 +15,6 @@ public:
 
     virtual const char* what() const throw();
     virtual const char* message() const = 0;
-    virtual int errornum() const = 0;
 };
 
 #endif
