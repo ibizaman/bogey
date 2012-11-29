@@ -20,7 +20,7 @@ Cube::Cube(double size, osg::ref_ptr<ShapeFactory> factory)
         osg::ref_ptr<TexturedDrawable> drawable(factory->getSquare(osg::Vec2d(textureNum*ratio, 0), osg::Vec2d(ratio, 1), size));
 
         osg::ref_ptr<FaceTransform> face(new FaceTransform(drawable));
-        factory->translate(face.get(), *direction, size/2);
+        face->setDirectionAndShift(*direction, size/2);
 
         directionMap->set(*direction, face);
 

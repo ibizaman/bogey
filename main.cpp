@@ -1,6 +1,8 @@
 #include <osg/Fog>
 #include <osg/Group>
 #include <osg/Geode>
+#include <osg/Light>
+#include <osg/LightSource>
 #include <osg/Node>
 #include <osg/PolygonMode>
 #include <osg/PositionAttitudeTransform>
@@ -48,7 +50,7 @@ int main(int argc, char* argv[])
     // Graph
     // -----
     ShapeFactory::Element playerCube(shapeFactory->get("cube"));
-    //ShapeFactory::Element terrainCube(shapeFactory->get("cube"));
+    ShapeFactory::Element terrainCube(shapeFactory->get("cube"));
     ShapeFactory::Element cube1(shapeFactory->get("cube"));
     cube1->setPosition(osg::Vec3d(2,3,0));
     //ShapeFactory::Element cube2(shapeFactory->get("cube"));
@@ -84,11 +86,11 @@ int main(int argc, char* argv[])
 
     cobbleGroup->addChild(playerTransform);
 
-    //osg::ref_ptr<osg::PositionAttitudeTransform> terrainTransform(new osg::PositionAttitudeTransform());
-    //terrainTransform->addChild(terrainCube);
-    //terrainTransform->setPosition(osg::Vec3d(0,0,-2));
-    //terrainTransform->setScale(osg::Vec3d(1000,1000,1));
-    //cobbleGroup->addChild(terrainTransform);
+    osg::ref_ptr<osg::PositionAttitudeTransform> terrainTransform(new osg::PositionAttitudeTransform());
+    terrainTransform->addChild(terrainCube);
+    terrainTransform->setPosition(osg::Vec3d(0,0,-20));
+    terrainTransform->setScale(osg::Vec3d(1000,1000,1));
+    cobbleGroup->addChild(terrainTransform);
 
     woodGroup->addChild(cube1);
     //woodGroup->addChild(cube2);
@@ -110,7 +112,7 @@ int main(int argc, char* argv[])
     // ---------------
     osg::ref_ptr<osg::StateSet> ss = root->getOrCreateStateSet();
 
-    ss->setMode(GL_LIGHTING, osg::StateAttribute::OFF);
+    ss->setMode(GL_LIGHTING, osg::StateAttribute::ON);
 
     const osg::Vec4 fogColor(0.796, 0.996, 0.996, 1.0);
     osg::ref_ptr<osg::Fog> fog(new osg::Fog());
@@ -119,6 +121,18 @@ int main(int argc, char* argv[])
     fog->setStart(15);
     fog->setEnd(100);
     // ss->setAttributeAndModes(fog);
+
+    osg::ref_ptr<osg::Light> light(new osg::Light());
+    light->setLightNum(0);
+    light->setDiffuse(osg::Vec4d(0.5,0.5,0.5,1));
+    light->setAmbient(osg::Vec4d(0.5,0.5,0.5,1));
+    light->setQuadraticAttenuation(0.001);
+    light->setPosition(osg::Vec4d(0,0,0,1));
+
+    osg::ref_ptr<osg::LightSource> lightsource = new osg::LightSource();
+    lightsource->setLight(light);
+    lightsource->setStateSetModes(*root->getOrCreateStateSet(), osg::StateAttribute::ON);
+    root->addChild(lightsource);
 
     // Viewer
     // ------

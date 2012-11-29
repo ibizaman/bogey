@@ -21,7 +21,6 @@ public:
 
     typedef osg::ref_ptr<TexturedDrawable> Drawable;
     Drawable getSquare(const osg::Vec2d&, const osg::Vec2d&, double length = 1);
-    void translate(osg::PositionAttitudeTransform*, osg::Vec3d, double);
 };
 
 #endif

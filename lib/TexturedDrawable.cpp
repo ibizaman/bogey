@@ -23,3 +23,18 @@ void TexturedDrawable::setTextureCoords(TextureCoords* textureCoords, unsigned i
     setTexCoordArray(unit, textureCoords);
 }
 
+void TexturedDrawable::setNormals(Normals* normals)
+{
+    setNormalArray(normals);
+    setNormalBinding(osg::Geometry::BIND_PER_VERTEX);
+}
+
+TexturedDrawable::normalsIterator TexturedDrawable::normalsBegin()
+{
+    return dynamic_cast<osg::Vec3Array*>(getNormalArray())->begin();
+}
+
+TexturedDrawable::normalsIterator TexturedDrawable::normalsEnd()
+{
+    return dynamic_cast<osg::Vec3Array*>(getNormalArray())->end();
+}
