@@ -98,7 +98,7 @@ OBJECTS_DIR:=$(BUILD_DIR)objects/
 OBJECTS:=$(addprefix $(OBJECTS_DIR),$(SOURCES:.cpp=.o))
 
 # Ensures directory tree is created
-@has_build_dir=$(wildcard $(BUILD_DIR))
+has_build_dir=$(wildcard $(BUILD_DIR))
 ifeq ($(has_build_dir),)
     $(shell for d in $(sort $(dir $(OBJECTS))); do \
          [ -d $$d ] || mkdir -p $$d; \
@@ -109,10 +109,10 @@ endif
 # COMPILATION RULES #
 #####################
 
-.PHONY: compile clean
+.PHONY: compile clean $(BUILD_DIR)make.depend
 
 # COMPILATION RULES
-compile: $(OBJECTS)
+compile: $(BUILD_DIR)make.depend $(OBJECTS)
 	$(CXX) -o $(BUILD_DIR)$(EXECUTABLE) $(LDFLAGS) $(OBJECTS)
 
 $(OBJECTS_DIR)%.o: %.cpp
@@ -124,9 +124,11 @@ ifneq ($(has_build_dir),)
 endif
 
 $(BUILD_DIR)make.depend: $(SOURCES)
-	for d in $(SOURCES); do \
+	@echo -n 'Generating make.depend...'
+	@for d in $(SOURCES); do \
 	    $(CXX) -MM $$d -MT $(OBJECTS_DIR)$${d/.cpp/.o} $(INCPATH) >> $@; \
 	done
+	@echo ' done'
 
 clean:
 	rm -rf $(BUILD_DIR)
