@@ -9,6 +9,7 @@ SOURCES=main.cpp\
 	transform/ShapeTransform.cpp\
 	transform/FaceTransform.cpp\
 	transform/PlayerTransform.cpp\
+	lib/Speed.cpp\
 	lib/TexturedDrawable.cpp\
 	lib/TexturingGroup.cpp\
 	lib/TriState.cpp\

@@ -2,7 +2,7 @@
 #define PLAYERTRANSFORM_H
 
 #include <osg/PositionAttitudeTransform>
-#include "lib/TriState.h"
+#include "lib/Speed.h"
 #include "lib/LimitedValue.hxx"
 
 class PlayerTransform : public osg::PositionAttitudeTransform
@@ -26,19 +26,11 @@ protected:
     inline osg::Vec3d getForward();
 
 private:
-    TriState _frontDirection;
-    TriState _sideDirection;
-    LimitedValue<double> _frontSpeed;
-    double _frontAcceleration;
-    double _frontStopAcceleration;
-    double _frontBrakeAcceleration;
+    void init();
+    Speed _frontSpeed;
+    Speed _sideSpeed;
     double _frontMaxWalkSpeed;
     double _frontMaxSprintSpeed;
-    LimitedValue<double> _sideSpeed;
-    double _sideAcceleration;
-    double _sideStopAcceleration;
-    double _sideBrakeAcceleration;
-    double _stopTrigger;
     double _pitch;
     double _maxPitch;
 };
