@@ -1,12 +1,4 @@
 template<typename T>
-LimitedValue<T>::LimitedValue(const T& value)
-    : _value(value),
-      _min(-1),
-      _max(1)
-{
-}
-
-template<typename T>
 LimitedValue<T>::LimitedValue(const T& value, const T& min, const T& max)
     : _value(value),
       _min(min),

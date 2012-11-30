@@ -7,7 +7,6 @@ template<typename T>
 class LimitedValue
 {
 public:
-    LimitedValue(const T&);
     LimitedValue(const T&, const T&, const T&);
     void operator=(const T&);
     bool operator==(const T&);

@@ -14,6 +14,8 @@ public:
     bool moveBackward;
     bool moveLeft;
     bool moveRight;
+    bool moveUp;
+    bool moveDown;
     float rotateHorizontally;
     float rotateVertically;
     bool sprint;

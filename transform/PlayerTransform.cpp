@@ -4,6 +4,7 @@ PlayerTransform::PlayerTransform()
     : osg::PositionAttitudeTransform(),
       _frontSpeed(-7,20),
       _sideSpeed(-12,12),
+      _verticalSpeed(-12,12),
       _frontMaxWalkSpeed(20),
       _frontMaxSprintSpeed(40),
       _pitch(0),
@@ -16,6 +17,7 @@ PlayerTransform::PlayerTransform(const osg::PositionAttitudeTransform& transform
     : osg::PositionAttitudeTransform(transform, copyop),
       _frontSpeed(-7,20),
       _sideSpeed(-12,12),
+      _verticalSpeed(-12,12),
       _frontMaxWalkSpeed(20),
       _frontMaxSprintSpeed(40),
       _pitch(0),
@@ -35,12 +37,18 @@ void PlayerTransform::init()
     _sideSpeed.setStopAcceleration(50);
     _sideSpeed.setBrakeAcceleration(80);
     _sideSpeed.setSensibility(1);
+
+    _verticalSpeed.setAcceleration(30);
+    _verticalSpeed.setStopAcceleration(50);
+    _verticalSpeed.setBrakeAcceleration(80);
+    _verticalSpeed.setSensibility(1);
 }
 
 void PlayerTransform::update(double dt)
 {
     setPosition(getPosition() + getForward() * _frontSpeed.getSpeed(dt) * dt);
     setPosition(getPosition() + getLeft() * _sideSpeed.getSpeed(dt) * dt);
+    setPosition(getPosition() + getUp() * _verticalSpeed.getSpeed(dt) * dt);
 }
 
 void PlayerTransform::forward()
@@ -61,6 +69,16 @@ void PlayerTransform::left()
 void PlayerTransform::right()
 {
     --_sideSpeed;
+}
+
+void PlayerTransform::up()
+{
+    ++_verticalSpeed;
+}
+
+void PlayerTransform::down()
+{
+    --_verticalSpeed;
 }
 
 void PlayerTransform::sprint(bool sprint)
