@@ -92,7 +92,7 @@ void PlayerTransform::sprint(bool sprint)
 
 void PlayerTransform::rotateHorizontally(double da)
 {
-    setAttitude(getAttitude() * osg::Quat(da, getUp()));
+    setAttitude(getAttitude() * osg::Quat(-da, getUp()));
 }
 
 void PlayerTransform::rotateVertically(double da)
@@ -103,7 +103,7 @@ void PlayerTransform::rotateVertically(double da)
         da = -_maxPitch - _pitch;
     }
     _pitch += da;
-    setAttitude(getAttitude() * osg::Quat(da, getLeft()));
+    setAttitude(getAttitude() * osg::Quat(-da, getLeft()));
 }
 
 inline osg::Vec3d PlayerTransform::getUp()
@@ -113,7 +113,7 @@ inline osg::Vec3d PlayerTransform::getUp()
 
 inline osg::Vec3d PlayerTransform::getLeft()
 {
-    return getForward() ^ getUp();
+    return getUp() ^ getForward();
 }
 
 inline osg::Vec3d PlayerTransform::getForward()

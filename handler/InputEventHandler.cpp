@@ -15,7 +15,7 @@ bool InputEventHandler::handle(const osgGA::GUIEventAdapter& event, osgGA::GUIAc
     switch (event.getEventType()) {
 
         case osgGA::GUIEventAdapter::MOVE:
-            _state->rotateHorizontally -= event.getXnormalized();
+            _state->rotateHorizontally += event.getXnormalized();
             _state->rotateVertically += event.getYnormalized();
             action.requestWarpPointer((event.getXmin()+event.getXmax())/2, (event.getYmin()+event.getYmax())/2);
             break;
