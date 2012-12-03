@@ -1,6 +1,6 @@
-#include "PlayerState.h"
+#include "KeyboardState.h"
 
-PlayerState::PlayerState()
+KeyboardState::KeyboardState()
     : moveForward(false),
       moveBackward(false),
       moveLeft(false),
@@ -13,7 +13,7 @@ PlayerState::PlayerState()
 {
 }
 
-void PlayerState::reset() {
+void KeyboardState::reset() {
     moveForward = false;
     moveBackward = false;
     moveLeft = false;

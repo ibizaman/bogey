@@ -4,7 +4,7 @@ SOURCES=main.cpp\
 	callback/UpdateTimerCallback.cpp\
 	player/PlayerAnimationCallback.cpp\
 	player/InputEventHandler.cpp\
-	player/PlayerState.cpp\
+	player/KeyboardState.cpp\
 	player/PlayerTransform.cpp\
 	terrain/Cube.cpp\
 	terrain/Chunk.cpp\

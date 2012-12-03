@@ -2,16 +2,16 @@
 #define PLAYERANIMATIONCALLBACK_H
 
 #include <osg/NodeCallback>
-#include "player/PlayerState.h"
+#include "player/KeyboardState.h"
 
 class PlayerAnimationCallback : public osg::NodeCallback
 {
 public:
-    PlayerAnimationCallback(osg::ref_ptr<PlayerState>);
+    PlayerAnimationCallback(osg::ref_ptr<KeyboardState>);
     virtual void operator()(osg::Node*, osg::NodeVisitor*);
 
 private:
-    osg::ref_ptr<PlayerState> _state;
+    osg::ref_ptr<KeyboardState> _state;
     double _previousTime;
 };
 

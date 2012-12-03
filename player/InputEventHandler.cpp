@@ -1,6 +1,6 @@
 #include "InputEventHandler.h"
 
-InputEventHandler::InputEventHandler(osg::ref_ptr<PlayerState> state)
+InputEventHandler::InputEventHandler(osg::ref_ptr<KeyboardState> state)
     : _state(state)
 {
 }

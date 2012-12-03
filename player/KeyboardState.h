@@ -1,12 +1,12 @@
-#ifndef PLAYERSTATE_H
-#define PLAYERSTATE_H
+#ifndef KEYBOARDSTATE_H
+#define KEYBOARDSTATE_H
 
 #include <osg/Referenced>
 
-class PlayerState : public osg::Referenced
+class KeyboardState : public osg::Referenced
 {
 public:
-    PlayerState();
+    KeyboardState();
     void reset();
 
 public:

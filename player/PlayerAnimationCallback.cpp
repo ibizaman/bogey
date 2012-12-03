@@ -1,7 +1,7 @@
 #include "PlayerAnimationCallback.h"
 #include "player/PlayerTransform.h"
 
-PlayerAnimationCallback::PlayerAnimationCallback(osg::ref_ptr<PlayerState> state)
+PlayerAnimationCallback::PlayerAnimationCallback(osg::ref_ptr<KeyboardState> state)
     : _state(state),
       _previousTime(0)
 {
