@@ -1,21 +1,21 @@
 EXECUTABLE=bogey
 
 SOURCES=main.cpp\
-	callback/PlayerAnimationCallback.cpp\
 	callback/UpdateTimerCallback.cpp\
-	factory/ShapeFactory.cpp\
-	handler/InputEventHandler.cpp\
-	state/PlayerState.cpp\
-	transform/ShapeTransform.cpp\
-	transform/FaceTransform.cpp\
-	transform/PlayerTransform.cpp\
+	player/PlayerAnimationCallback.cpp\
+	player/InputEventHandler.cpp\
+	player/PlayerState.cpp\
+	player/PlayerTransform.cpp\
+	terrain/Cube.cpp\
+	terrain/Chunk.cpp\
+	terrain/FaceTransform.cpp\
+	terrain/ShapeFactory.cpp\
+	terrain/ShapeTransform.cpp\
 	lib/Speed.cpp\
 	lib/TexturedDrawable.cpp\
 	lib/TexturingGroup.cpp\
 	lib/TriState.cpp\
 	exception/BaseException.cpp\
-	object/Cube.cpp\
-	shape/Chunk.cpp\
 	lib/Perlin3D.cpp\
 
 SOURCES_T=test/BaseExceptionTest.cpp\

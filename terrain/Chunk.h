@@ -2,7 +2,7 @@
 #define CHUNK_H
 
 #include <osg/PositionAttitudeTransform>
-#include "transform/ShapeTransform.h"
+#include "terrain/ShapeTransform.h"
 #include "lib/Perlin3D.h"
 
 class Chunk : public osg::PositionAttitudeTransform

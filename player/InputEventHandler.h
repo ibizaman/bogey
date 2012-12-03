@@ -6,7 +6,7 @@
 #include <osgGA/GUIActionAdapter>
 #include <osg/Object>
 #include <osg/NodeVisitor>
-#include "state/PlayerState.h"
+#include "player/PlayerState.h"
 
 class InputEventHandler : public osgGA::GUIEventHandler
 {

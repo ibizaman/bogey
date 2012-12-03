@@ -1,5 +1,5 @@
 #include "PlayerAnimationCallback.h"
-#include "transform/PlayerTransform.h"
+#include "player/PlayerTransform.h"
 
 PlayerAnimationCallback::PlayerAnimationCallback(osg::ref_ptr<PlayerState> state)
     : _state(state),

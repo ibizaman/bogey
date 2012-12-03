@@ -2,7 +2,7 @@
 #define PLAYERANIMATIONCALLBACK_H
 
 #include <osg/NodeCallback>
-#include "state/PlayerState.h"
+#include "player/PlayerState.h"
 
 class PlayerAnimationCallback : public osg::NodeCallback
 {

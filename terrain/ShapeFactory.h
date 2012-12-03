@@ -2,7 +2,7 @@
 #define SHAPEFACTORY_H
 
 #include "lib/Factory.hxx"
-#include "transform/ShapeTransform.h"
+#include "terrain/ShapeTransform.h"
 #include <osg/Node>
 #include <osg/PositionAttitudeTransform>
 #include <osg/Vec2d>

@@ -1,5 +1,5 @@
 #include "Cube.h"
-#include "transform/FaceTransform.h"
+#include "terrain/FaceTransform.h"
 
 Cube::Cube(double size, osg::ref_ptr<ShapeFactory> factory)
 {

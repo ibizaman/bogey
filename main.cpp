@@ -8,14 +8,14 @@
 #include <osg/PositionAttitudeTransform>
 #include <osgViewer/Viewer>
 #include <osgGA/NodeTrackerManipulator>
-#include "callback/PlayerAnimationCallback.h"
-#include "factory/ShapeFactory.h"
-#include "handler/InputEventHandler.h"
-#include "state/PlayerState.h"
-#include "transform/ShapeTransform.h"
-#include "transform/PlayerTransform.h"
-#include "object/Cube.h"
-#include "shape/Chunk.h"
+#include "player/InputEventHandler.h"
+#include "player/PlayerAnimationCallback.h"
+#include "player/PlayerState.h"
+#include "player/PlayerTransform.h"
+#include "terrain/Cube.h"
+#include "terrain/Chunk.h"
+#include "terrain/ShapeFactory.h"
+#include "terrain/ShapeTransform.h"
 #include "lib/TexturingGroup.h"
 #include "lib/Perlin3D.h"
 
@@ -73,11 +73,11 @@ int main(int argc, char* argv[])
     // Terrain
     // -------
     osg::ref_ptr<osg::Group> root(new osg::Group);
-    osg::ref_ptr<TexturingGroup> cobbleGroup(new TexturingGroup("texture/cobblestone.tga"));
-    osg::ref_ptr<TexturingGroup> woodGroup(new TexturingGroup("texture/wood.tga"));
-    osg::ref_ptr<TexturingGroup> sandGroup(new TexturingGroup("texture/sand.tga"));
-    osg::ref_ptr<TexturingGroup> plankGroup(new TexturingGroup("texture/plank.tga"));
-    osg::ref_ptr<TexturingGroup> dirtGroup(new TexturingGroup("texture/dirt.tga"));
+    osg::ref_ptr<TexturingGroup> cobbleGroup(new TexturingGroup("terrain/texture/cobblestone.tga"));
+    osg::ref_ptr<TexturingGroup> woodGroup(new TexturingGroup("terrain/texture/wood.tga"));
+    osg::ref_ptr<TexturingGroup> sandGroup(new TexturingGroup("terrain/texture/sand.tga"));
+    osg::ref_ptr<TexturingGroup> plankGroup(new TexturingGroup("terrain/texture/plank.tga"));
+    osg::ref_ptr<TexturingGroup> dirtGroup(new TexturingGroup("terrain/texture/dirt.tga"));
     root->addChild(cobbleGroup);
     root->addChild(woodGroup);
     root->addChild(sandGroup);

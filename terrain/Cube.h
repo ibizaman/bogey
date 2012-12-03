@@ -1,8 +1,8 @@
 #ifndef CUBE_H
 #define CUBE_H
 
-#include "transform/ShapeTransform.h"
-#include "factory/ShapeFactory.h"
+#include "terrain/ShapeTransform.h"
+#include "terrain/ShapeFactory.h"
 
 class Cube : public ShapeTransform
 {

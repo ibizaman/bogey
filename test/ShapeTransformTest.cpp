@@ -2,7 +2,7 @@
 #include <gmock/gmock.h>
 #include <osg/PositionAttitudeTransform>
 #include <osg/Vec3d>
-#include "transform/ShapeTransform.h"
+#include "terrain/ShapeTransform.h"
 #include <iostream>
 
 class ShapeTransformTest : public ::testing::Test

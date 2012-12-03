@@ -1,5 +1,5 @@
 #include "ShapeFactory.h"
-#include "transform/FaceTransform.h"
+#include "terrain/FaceTransform.h"
 #include <cmath>
 
 ShapeFactory::ShapeFactory(bool notErasable)
