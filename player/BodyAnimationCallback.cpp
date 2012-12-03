@@ -1,13 +1,13 @@
-#include "PlayerAnimationCallback.h"
+#include "BodyAnimationCallback.h"
 #include "player/PlayerTransform.h"
 
-PlayerAnimationCallback::PlayerAnimationCallback(osg::ref_ptr<KeyboardState> state)
+BodyAnimationCallback::BodyAnimationCallback(osg::ref_ptr<KeyboardState> state)
     : _state(state),
       _previousTime(0)
 {
 }
 
-void PlayerAnimationCallback::operator()(osg::Node* node, osg::NodeVisitor* visitor)
+void BodyAnimationCallback::operator()(osg::Node* node, osg::NodeVisitor* visitor)
 {
     PlayerTransform* pat(dynamic_cast<PlayerTransform*>(node));
 

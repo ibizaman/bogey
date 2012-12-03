@@ -2,7 +2,7 @@ EXECUTABLE=bogey
 
 SOURCES=main.cpp\
 	callback/UpdateTimerCallback.cpp\
-	player/PlayerAnimationCallback.cpp\
+	player/BodyAnimationCallback.cpp\
 	player/InputEventHandler.cpp\
 	player/KeyboardState.cpp\
 	player/PlayerTransform.cpp\

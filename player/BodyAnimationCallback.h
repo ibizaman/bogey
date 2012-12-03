@@ -1,13 +1,13 @@
-#ifndef PLAYERANIMATIONCALLBACK_H
-#define PLAYERANIMATIONCALLBACK_H
+#ifndef BODYANIMATIONCALLBACK_H
+#define BODYANIMATIONCALLBACK_H
 
 #include <osg/NodeCallback>
 #include "player/KeyboardState.h"
 
-class PlayerAnimationCallback : public osg::NodeCallback
+class BodyAnimationCallback : public osg::NodeCallback
 {
 public:
-    PlayerAnimationCallback(osg::ref_ptr<KeyboardState>);
+    BodyAnimationCallback(osg::ref_ptr<KeyboardState>);
     virtual void operator()(osg::Node*, osg::NodeVisitor*);
 
 private:

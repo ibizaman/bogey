@@ -9,7 +9,7 @@
 #include <osgViewer/Viewer>
 #include <osgGA/NodeTrackerManipulator>
 #include "player/InputEventHandler.h"
-#include "player/PlayerAnimationCallback.h"
+#include "player/BodyAnimationCallback.h"
 #include "player/KeyboardState.h"
 #include "player/PlayerTransform.h"
 #include "terrain/Cube.h"
@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
     playerTransform->addChild(playerCube);
     playerTransform->setPosition(osg::Vec3d(-10,0,0));
     osg::ref_ptr<KeyboardState> keyboardState(new KeyboardState());
-    playerTransform->addUpdateCallback(new PlayerAnimationCallback(keyboardState));
+    playerTransform->addUpdateCallback(new BodyAnimationCallback(keyboardState));
 
     // Terrain
     // -------
