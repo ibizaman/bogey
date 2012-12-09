@@ -1,6 +1,7 @@
 EXECUTABLE=bogey
 
 SOURCES=main.cpp\
+	GameManager.cpp\
 	callback/UpdateTimerCallback.cpp\
 	player/BodyAnimationCallback.cpp\
 	player/BodyTransform.cpp\
@@ -9,6 +10,7 @@ SOURCES=main.cpp\
 	terrain/Cube.cpp\
 	terrain/Chunk.cpp\
 	terrain/FaceTransform.cpp\
+	terrain/MapManager.cpp\
 	terrain/ShapeFactory.cpp\
 	terrain/ShapeTransform.cpp\
 	lib/Speed.cpp\
