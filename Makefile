@@ -128,6 +128,7 @@ endif
 
 $(BUILD_DIR)make.depend: $(SOURCES)
 	@echo -n 'Generating make.depend...'
+	@test -f $@ && rm $@
 	@for d in $(SOURCES); do \
 	    $(CXX) -MM $$d -MT $(OBJECTS_DIR)$${d/.cpp/.o} $(INCPATH) >> $@; \
 	done
