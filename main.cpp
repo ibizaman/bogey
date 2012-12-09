@@ -49,13 +49,13 @@ int main(int argc, char* argv[])
     
     // Graph
     // -----
-    ShapeFactory::Element playerCube(shapeFactory->get("cube"));
-    ShapeFactory::Element terrainCube(shapeFactory->get("cube"));
-    ShapeFactory::Element cube1(shapeFactory->get("cube"));
+    ShapeFactory::Element playerCube(shapeFactory->getOriginal("cube"));
+    ShapeFactory::Element terrainCube(shapeFactory->getOriginal("cube"));
+    ShapeFactory::Element cube1(shapeFactory->getOriginal("cube"));
     cube1->setPosition(osg::Vec3d(2,3,0));
-    //ShapeFactory::Element cube2(shapeFactory->get("cube"));
+    //ShapeFactory::Element cube2(shapeFactory->getOriginal("cube"));
     //cube2->setPosition(osg::Vec3d(3,3,0));
-    ShapeFactory::Element cube3(shapeFactory->get("cube"));
+    ShapeFactory::Element cube3(shapeFactory->getOriginal("cube"));
     cube3->setPosition(osg::Vec3d(4,3,0));
     cube3->setAttitude(osg::Quat(osg::PI/2, osg::Vec3d(1,0,0)));
     //cube1->bindNeighbour(cube2);
@@ -97,7 +97,7 @@ int main(int argc, char* argv[])
     woodGroup->addChild(cube3);
 
     Perlin3D perlin1(123456789 , 10000000 , 0.5);
-    osg::ref_ptr<Chunk> chunk1(new Chunk(shapeFactory->get("cube"), perlin1));
+    osg::ref_ptr<Chunk> chunk1(new Chunk(shapeFactory->getOriginal("cube"), perlin1));
     plankGroup->addChild(chunk1);
 
     // Axis

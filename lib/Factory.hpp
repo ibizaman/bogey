@@ -23,7 +23,17 @@ bool Factory<T,K>::isElement(K key)
 }
 
 template<typename T, typename K>
-typename Factory<T,K>::Element Factory<T,K>::get(K key) const
+typename Factory<T,K>::Element Factory<T,K>::getOriginal(K key)
+{
+    typename Factory<T,K>::iterator it = _map.find(key);
+    if (it == end()) {
+        throw ElementDoNotExist(key);
+    }
+    return it->second.get();
+}
+
+template<typename T, typename K>
+typename Factory<T,K>::Element Factory<T,K>::getCopy(K key) const
 {
     typename Factory<T,K>::const_iterator it = _map.find(key);
     if (it == end()) {

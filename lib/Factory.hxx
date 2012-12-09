@@ -11,12 +11,14 @@ class Factory : public osg::Referenced
 {
 public:
     typedef osg::ref_ptr<T> Element;
+    typedef typename std::map<K,Element>::iterator iterator;
     typedef typename std::map<K,Element>::const_iterator const_iterator;
 
     Factory(bool);
     void insert(K, Element);
     bool isElement(K);
-    Element get(K) const;
+    Element getOriginal(K);
+    Element getCopy(K) const;
     const_iterator begin() const;
     const_iterator end() const;
 
