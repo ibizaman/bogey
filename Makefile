@@ -3,9 +3,9 @@ EXECUTABLE=bogey
 SOURCES=main.cpp\
 	callback/UpdateTimerCallback.cpp\
 	player/BodyAnimationCallback.cpp\
+	player/BodyTransform.cpp\
 	player/InputEventHandler.cpp\
 	player/KeyboardState.cpp\
-	player/PlayerTransform.cpp\
 	terrain/Cube.cpp\
 	terrain/Chunk.cpp\
 	terrain/FaceTransform.cpp\

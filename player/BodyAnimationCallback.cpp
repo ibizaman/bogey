@@ -1,5 +1,5 @@
 #include "BodyAnimationCallback.h"
-#include "player/PlayerTransform.h"
+#include "player/BodyTransform.h"
 
 BodyAnimationCallback::BodyAnimationCallback(osg::ref_ptr<KeyboardState> state)
     : _state(state),
@@ -9,7 +9,7 @@ BodyAnimationCallback::BodyAnimationCallback(osg::ref_ptr<KeyboardState> state)
 
 void BodyAnimationCallback::operator()(osg::Node* node, osg::NodeVisitor* visitor)
 {
-    PlayerTransform* pat(dynamic_cast<PlayerTransform*>(node));
+    BodyTransform* pat(dynamic_cast<BodyTransform*>(node));
 
     if (pat) {
 

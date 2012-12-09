@@ -1,15 +1,15 @@
-#ifndef PLAYERTRANSFORM_H
-#define PLAYERTRANSFORM_H
+#ifndef BODYTRANSFORM_H
+#define BODYTRANSFORM_H
 
 #include <osg/PositionAttitudeTransform>
 #include "lib/Speed.h"
 #include "lib/LimitedValue.hxx"
 
-class PlayerTransform : public osg::PositionAttitudeTransform
+class BodyTransform : public osg::PositionAttitudeTransform
 {
 public:
-    PlayerTransform();
-    PlayerTransform(const osg::PositionAttitudeTransform&, const osg::CopyOp& = osg::CopyOp::SHALLOW_COPY);
+    BodyTransform();
+    BodyTransform(const osg::PositionAttitudeTransform&, const osg::CopyOp& = osg::CopyOp::SHALLOW_COPY);
 
     void update(double);
     void forward();

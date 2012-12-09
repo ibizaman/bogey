@@ -1,6 +1,6 @@
-#include "PlayerTransform.h"
+#include "BodyTransform.h"
 
-PlayerTransform::PlayerTransform()
+BodyTransform::BodyTransform()
     : osg::PositionAttitudeTransform(),
       _frontSpeed(-7,20),
       _sideSpeed(-12,12),
@@ -13,7 +13,7 @@ PlayerTransform::PlayerTransform()
     init();
 }
 
-PlayerTransform::PlayerTransform(const osg::PositionAttitudeTransform& transform, const osg::CopyOp& copyop)
+BodyTransform::BodyTransform(const osg::PositionAttitudeTransform& transform, const osg::CopyOp& copyop)
     : osg::PositionAttitudeTransform(transform, copyop),
       _frontSpeed(-7,20),
       _sideSpeed(-12,12),
@@ -26,7 +26,7 @@ PlayerTransform::PlayerTransform(const osg::PositionAttitudeTransform& transform
     init();
 }
 
-void PlayerTransform::init()
+void BodyTransform::init()
 {
     _frontSpeed.setAcceleration(20);
     _frontSpeed.setStopAcceleration(60);
@@ -44,44 +44,44 @@ void PlayerTransform::init()
     _verticalSpeed.setSensibility(1);
 }
 
-void PlayerTransform::update(double dt)
+void BodyTransform::update(double dt)
 {
     setPosition(getPosition() + getForward() * _frontSpeed.getSpeed(dt) * dt);
     setPosition(getPosition() + getLeft() * _sideSpeed.getSpeed(dt) * dt);
     setPosition(getPosition() + getUp() * _verticalSpeed.getSpeed(dt) * dt);
 }
 
-void PlayerTransform::forward()
+void BodyTransform::forward()
 {
     ++_frontSpeed;
 }
 
-void PlayerTransform::backward()
+void BodyTransform::backward()
 {
     --_frontSpeed;
 }
 
-void PlayerTransform::left()
+void BodyTransform::left()
 {
     ++_sideSpeed;
 }
 
-void PlayerTransform::right()
+void BodyTransform::right()
 {
     --_sideSpeed;
 }
 
-void PlayerTransform::up()
+void BodyTransform::up()
 {
     ++_verticalSpeed;
 }
 
-void PlayerTransform::down()
+void BodyTransform::down()
 {
     --_verticalSpeed;
 }
 
-void PlayerTransform::sprint(bool sprint)
+void BodyTransform::sprint(bool sprint)
 {
     if (sprint) {
         _frontSpeed.setMaxSpeed(_frontMaxSprintSpeed);
@@ -90,12 +90,12 @@ void PlayerTransform::sprint(bool sprint)
     }
 }
 
-void PlayerTransform::rotateHorizontally(double da)
+void BodyTransform::rotateHorizontally(double da)
 {
     setAttitude(getAttitude() * osg::Quat(-da, getUp()));
 }
 
-void PlayerTransform::rotateVertically(double da)
+void BodyTransform::rotateVertically(double da)
 {
     if (_pitch + da > _maxPitch) {
         da = _maxPitch - _pitch;
@@ -106,17 +106,17 @@ void PlayerTransform::rotateVertically(double da)
     setAttitude(getAttitude() * osg::Quat(-da, getLeft()));
 }
 
-inline osg::Vec3d PlayerTransform::getUp()
+inline osg::Vec3d BodyTransform::getUp()
 {
     return osg::Vec3d(0,0,1);
 }
 
-inline osg::Vec3d PlayerTransform::getLeft()
+inline osg::Vec3d BodyTransform::getLeft()
 {
     return getUp() ^ getForward();
 }
 
-inline osg::Vec3d PlayerTransform::getForward()
+inline osg::Vec3d BodyTransform::getForward()
 {
     osg::Vec3d attitude = getAttitude() * osg::Vec3d(1,0,0);
     attitude.z() = 0;
